@@ -1,6 +1,17 @@
 # ASTRA — punto de control persistente
 
-Actualizado: 2026-11-13 (America/Bogota). **MISIÓN TÉCNICA COMPLETADA Y VERIFICADA. PR abierto en borrador, sin fusionar.**
+Actualizado: 2026-11-13 (America/Bogota). **V4 EN CURSO. No declarar terminada todavía.**
+
+## Continuación V4 solicitada
+El usuario pidió cumplir solamente lo especificado para V4. La fase V2 siguiente se conserva como historial. HEAD inicial V4: 431dcb4cc3846ec238cec653fc761bbe01d1ef44. Rama y PR personal existentes, sin fusionar.
+
+Fallo real detectado en navegador: /_framework/blazor.web.js devuelve 404 en producción .NET 10; SSR muestra reportes pero los clics no ejecutan eventos. Corregido App.razor para resolver @Assets["_framework/blazor.web.js"] según Microsoft Learn .NET 10. Pendiente: compilar imagen de producción, comprobar script, commit/push y desplegar SOLO frontend existente, probar interacción de diez reportes/CSV/dashboard/móvil, preparar Spec Kit y mapa V4, actualizar PR y empaquetar outputs/V4.
+
+Las suites HTTP anteriores no verificaban el arranque JavaScript; WSS negociado por cliente de prueba tampoco demostraba que el navegador iniciara Blazor. No presentar esos checks como evidencia de botones. Captura preliminar dashboard-375.jpg en outputs/V4/evidencias; aún no prueba de aceptación final.
+
+Archivos modificados V4 hasta ahora: front_blazor/Components/App.razor, ASTRA_ESTADO_TRABAJO.md y ASTRA_REANUDAR.txt. Consultar git status para cambios posteriores. No cambiar esquema/semillas ni duplicar servicios/proyecto. Al reanudar verificar Git, Neon y Render antes de continuar.
+
+## Historial fase V2
 
 ## Objetivo y repositorios
 Completar despliegue real, pruebas, Spec Kit V2 y MAPA_COMPLETO_PROYECTO_V2.txt conservando arquitectura y trabajo colaborativo.

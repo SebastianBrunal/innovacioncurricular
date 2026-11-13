@@ -1,3 +1,7 @@
+CONTINUAR — V4 EN CURSO
+Leer primero sección Continuación V4 de ASTRA_ESTADO_TRABAJO.md. Verificar Git, Neon y Render. HEAD inicial 431dcb4cc3846ec238cec653fc761bbe01d1ef44. Corregido arranque Blazor con @Assets; pendiente build, comprobación y deploy SOLO frontend, prueba real de botones/CSV/móvil y entrega documental V4. No asumir cierre V2 como cierre V4. Reutilizar PR #1 y recursos existentes. No limpiar, migrar de nuevo ni fusionar main.
+
+HISTORIAL V2 (no sustituye la tarea V4 pendiente):
 CONTINUAR — Innovación Curricular V2
 Repositorio final: https://github.com/SebastianBrunal/innovacioncurricular
 Local: C:/Users/USER/Documents/Codex/2026-11-13/14-continuidad-autom-tica-por-l/work/innovacioncurricular
