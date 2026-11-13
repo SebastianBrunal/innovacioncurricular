@@ -1,5 +1,10 @@
 CONTINUAR — V4 EN CURSO
-Leer primero sección Continuación V4 de ASTRA_ESTADO_TRABAJO.md. Verificar Git, Neon y Render. HEAD inicial 431dcb4cc3846ec238cec653fc761bbe01d1ef44. Corregido arranque Blazor con @Assets; pendiente build, comprobación y deploy SOLO frontend, prueba real de botones/CSV/móvil y entrega documental V4. No asumir cierre V2 como cierre V4. Reutilizar PR #1 y recursos existentes. No limpiar, migrar de nuevo ni fusionar main.
+1. Leer sección Continuación V4 de ASTRA_ESTADO_TRABAJO.md. Verificar git status, log, fetch personal/origin; preservar cambios. Mantener rama y PR #1, sin merge/force push.
+2. Verificar Neon lingering-dream-80917462 / br-morning-block-bckftle6 / innovacion_curricular y Render existentes. No crear recursos/migrar/sembrar de nuevo.
+3. Último cambio de aplicación 674eb9e35001047fed54cd4140f25085701c1dc9; frontend dep-dbrkhe3m8hqs73d2ooa0 LIVE; prueba validar_arranque_blazor.py verde con script fingerprint 200. No redeploy si no hay nuevo cambio que lo justifique.
+4. PENDIENTE EXACTO: validación real posterior al arreglo de diez botones de reportes, CSV, Actualizar dashboard, seis tablas de datos y responsive. Computer Use paró por imposibilidad de verificar la URL de Chrome; no insistir ni eludir la protección. Reanudar solo cuando la herramienta funcione. No declarar cerrada V4 usando checks HTTP.
+5. Después completar Spec Kit V4 en v4_neon_render, mapa V4, informe/validación/estado V4, PR existente y paquete outputs/V4. Generador preparado --revision v4, todavía no ejecutado. Preservar V2/v4_publicacion y tag v4 original, firmas humanas y main.
+6. Credenciales solo ../.env.render-privado.json y ../.env.neon; nunca imprimir ni versionar. Evidencias preliminares en outputs/V4/evidencias. Guardar checkpoint antes de interrupciones; no hay reactivación automática de cuota confirmada.
 
 HISTORIAL V2 (no sustituye la tarea V4 pendiente):
 CONTINUAR — Innovación Curricular V2

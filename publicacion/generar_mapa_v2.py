@@ -81,12 +81,18 @@ def endpoints():
     return sorted(rows,key=lambda x:(x['route'],x['method']))
 
 def main():
+    global SPEC
     parser=argparse.ArgumentParser()
     parser.add_argument('--ref',default=None,help='Commit que contiene todos los archivos enlazados')
     parser.add_argument('--swagger-url',default=None,help='Opcional: contrastar rutas API con OpenAPI real, sin autenticación')
+    parser.add_argument('--revision', choices=['v2','v4'], default='v2', help='Entrega documental; V2 se conserva por defecto')
     args=parser.parse_args()
+    label=args.revision.upper()
+    SPEC=f'docs/spec_kit/versiones/{args.revision}_neon_render'
+    mapa_name=f'MAPA_COMPLETO_PROYECTO_{label}.txt'
+    validacion_name=f'docs/VALIDACION_NEON_RENDER_{label}.md'
     ref=args.ref or git('rev-parse','HEAD')
-    estado_path=ROOT/'docs/ESTADO_DESPLIEGUE_V2.json'
+    estado_path=ROOT/f'docs/ESTADO_DESPLIEGUE_{label}.json'
     estado=json.loads(estado_path.read_text(encoding='utf-8')) if estado_path.exists() else {}
     publico_verificado=estado.get('verificado_publicamente',False)
     rows=endpoints()
@@ -98,16 +104,16 @@ def main():
         if actual!=expected:raise ValueError(f'Diferencias Swagger/código: faltantes={actual-expected}; sobrantes={expected-actual}')
         (ROOT/SPEC/'openapi.local.json').write_text(json.dumps(swagger,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         verified=True
-    files=sorted(set(git('ls-files').splitlines()+[SPEC+'/6_contracts.md','MAPA_COMPLETO_PROYECTO_V2.txt']))
-    files=[f for f in files if (ROOT/f).exists() or f.endswith('6_contracts.md') or f=='MAPA_COMPLETO_PROYECTO_V2.txt']
-    contracts=['# Contratos HTTP — revisión V2\n',f'Código fuente auditado: [{ref}]({REPO}/tree/{ref}). {len(rows)} operaciones API explícitas. Comparación con Swagger ejecutado: '+('coincidencia exacta' if verified else 'no ejecutada en esta invocación')+'.\n',
+    files=sorted(set(git('ls-files').splitlines()+[SPEC+'/6_contracts.md',mapa_name]))
+    files=[f for f in files if (ROOT/f).exists() or f.endswith('6_contracts.md') or f==mapa_name]
+    contracts=[f'# Contratos HTTP — revisión {label}\n',f'Código fuente auditado: [{ref}]({REPO}/tree/{ref}). {len(rows)} operaciones API explícitas. Comparación con Swagger ejecutado: '+('coincidencia exacta' if verified else 'no ejecutada en esta invocación')+'.\n',
       'Los contratos funcionales históricos se conservan: 204 sin filas; cuerpos inválidos 422; reglas de negocio 400; inexistentes 404; conflicto 409; sin token 401; rol insuficiente 403. Las creaciones V1 conservan 200 y V2+ usan 201. Los esquemas exactos de peticiones/DTO y seguridad están en [openapi.local.json](openapi.local.json), exportado del backend compilado. No se presenta cada operación como verificada públicamente.\n',
       '| Método | Ruta completa | Función y declaración | Autorización |\n|---|---|---|---|']
     for x in rows:
         contracts.append(f"| {x['method']} | `{x['route']}` | [{x['function']}()]({source_url(ref,x['path'],x['line'])}) | {x['auth']} |")
-    contracts.append('\nFrontend: las rutas Razor y los endpoints de sesión/health se enumeran por separado en MAPA_COMPLETO_PROYECTO_V2.txt. Swagger y los recursos estáticos son middleware/framework, no controladores de negocio.\n')
+    contracts.append(f'\nFrontend: las rutas Razor y los endpoints de sesión/health se enumeran por separado en {mapa_name}. Swagger y los recursos estáticos son middleware/framework, no controladores de negocio.\n')
     (ROOT/SPEC/'6_contracts.md').write_text('\n'.join(contracts)+'\n',encoding='utf-8')
-    out=['MAPA COMPLETO PROYECTO V2',f'Repositorio: {REPO}',f'Referencia inmutable del inventario: {ref}',
+    out=[f'MAPA COMPLETO PROYECTO {label}',f'Repositorio: {REPO}',f'Referencia inmutable del inventario: {ref}',
          ('Estado: Neon y ambos servicios Render VERIFICADOS PÚBLICAMENTE.' if publico_verificado else 'Estado: publicación externa pendiente de verificar.')+' Ver ASTRA_ESTADO_TRABAJO.md.',
          f'API: {len(rows)} operaciones explícitas; contraste con Swagger ejecutado: '+('COINCIDENCIA EXACTA' if verified else 'NO EJECUTADO'),
          'Los números de línea son de esta referencia. El mapa y su propio generador pueden estar en un commit posterior; sus enlaces de autorreferencia usan la rama.',
@@ -120,7 +126,7 @@ def main():
           'Modelo/DTO: '+x['model'],'Tablas relacionadas: '+(', '.join(x['tables']) or 'Ninguna identificada; consultar el repositorio/controlador'),
           'Middleware/autorización: '+x['auth']+('; validación ApiController 422 y filtro de errores 500 en MVC' if '/Controllers/' in x['path'] else '; endpoint mínimo fuera del filtro MVC, errores health controlados'),
           'Pruebas relacionadas: '+('; '.join(x['tests']) or 'api_innovacion/pruebas/PruebaDeCapas.cs (ejecutador; sin prueba HTTP individual localizada)'),
-          'Documentación: '+SPEC+'/6_contracts.md; openapi.local.json; docs/VALIDACION_NEON_RENDER_V2.md',
+          'Documentación: '+SPEC+'/6_contracts.md; openapi.local.json; '+validacion_name,
           'GitHub: '+source_url(ref,x['path'],x['line']),
           'Estado: IMPLEMENTADO; CONTRATO COMPARADO CON SWAGGER EJECUTADO. Cobertura funcional por operación: consultar las pruebas relacionadas y el informe; no se atribuye una prueba individual sin evidencia.']
     out+=['\nENDPOINTS FRONTEND Y MIDDLEWARE']
@@ -133,7 +139,7 @@ def main():
                         'Modelo/tabla: DTO del componente/servicio frontend; sin acceso directo a tablas. Datos a través de las rutas API relacionadas.',
                         'Autorización: '+auth+'; atributos: '+('; '.join(re.findall(r'^@attribute (.*)',s,re.M)) or 'sin atributo adicional'),
                         'Pruebas: pruebas_humo/humo_front.py, humo_roles_front.py y humo_reportes.py (ver alcance en informe).',
-                        'Documentación: '+SPEC+'/3_plan.md; DESPLIEGUE_NEON_RENDER.md; docs/VALIDACION_NEON_RENDER_V2.md.',
+                        'Documentación: '+SPEC+'/3_plan.md; DESPLIEGUE_NEON_RENDER.md; '+validacion_name+'.',
                         'Estado: IMPLEMENTADO Y COMPILADO; cobertura asociada en suites, sin afirmación de cada interacción visual.',
                         'GitHub: '+source_url(ref,f,line_at(s,a.start()))]
     for f in ['front_blazor/Program.cs','front_blazor/Ensamblador/EnsambladorSesion.cs']:
@@ -195,18 +201,18 @@ def main():
         if f.lower().endswith('.md') and (ROOT/f).exists():
             s=read(f);title=next((x.lstrip('# ') for x in s.splitlines() if x.startswith('#')),Path(f).stem)
             out.append(f'{f} | {len(s.splitlines())} líneas | {title}')
-    out+=['\nH. DOCUMENTACIÓN SPEC KIT V2',SPEC+'/','Constitución: docs/spec_kit/1_constitution.md (1.6.0 en revisión); versiones históricas preservadas.',
+    out+=[f'\nH. DOCUMENTACIÓN SPEC KIT {label}',SPEC+'/','Constitución: docs/spec_kit/1_constitution.md (1.6.0 en revisión); versiones históricas preservadas.',
           '2_spec: requisitos y estados; 3_plan: arquitectura; 4_research: decisiones; 5_data_model: 25 tablas; 6_contracts + openapi.local.json: API real; 7_quickstart: operación; 8_tasks: estado; 9_checklist: aceptación.',
-          '\nI. PRUEBAS Y RESULTADOS','Ver docs/VALIDACION_NEON_RENDER_V2.md: distingue capas, HTTP local, migraciones, compilación y pruebas públicas ejecutadas y límites de cobertura. No atribuir pruebas locales a Neon/Render.',
+          '\nI. PRUEBAS Y RESULTADOS',f'Ver {validacion_name}: distingue capas, HTTP local, migraciones, compilación y pruebas públicas ejecutadas y límites de cobertura. No atribuir pruebas locales a Neon/Render.',
           '\nJ. DESPLIEGUE EN NEON Y RENDER','DESPLIEGUE_NEON_RENDER.md; render.yaml; api_innovacion/Dockerfile.render; front_blazor/Dockerfile.render; publicacion/.env.neon.example; db/postgres.',
           'Frontend: '+estado.get('frontend',{}).get('url','sin verificar')+'; backend: '+estado.get('backend',{}).get('url','sin verificar'),
           'Neon: '+estado.get('neon',{}).get('project_id','sin verificar')+'; base: '+estado.get('neon',{}).get('database','sin verificar')+'. No se modificó MonsterASP ni el servicio inventario de Render.',
           '\nK. ERRORES CONOCIDOS Y PENDIENTES',
           ('Sin bloqueos de despliegue ni fallos abiertos en las suites ejecutadas. Neon, Render y HTTP público comprobados.' if publico_verificado else 'Ver ASTRA_ESTADO_TRABAJO.md para bloqueos y siguiente acción.'),
-          'La interacción visual completa de todos los botones Blazor no está automatizada. El transporte WSS blazorpack y las cookies Secure/HttpOnly sí se verificaron públicamente.',
+          ('V4: diez selecciones de reportes y CSV comprobados en navegador; alcance exacto y evidencias en '+validacion_name+'. No se afirma haber recorrido todos los CRUD.' if args.revision=='v4' else 'La interacción visual completa de todos los botones Blazor no está automatizada. El transporte WSS blazorpack y las cookies Secure/HttpOnly sí se verificaron públicamente.'),
           'Sesiones en memoria y claves DataProtection efímeras: reinicios cierran sesiones. No hay pruebas de carga ni SLA. No se transfirieron datos reales.',
           'Continuidad: ASTRA_ESTADO_TRABAJO.md y ASTRA_REANUDAR.txt. Verificar Git/Neon/Render antes de continuar; no duplicar operaciones ni sobrescribir cambios.']
-    (ROOT/'MAPA_COMPLETO_PROYECTO_V2.txt').write_text('\n'.join(out)+'\n',encoding='utf-8')
+    (ROOT/mapa_name).write_text('\n'.join(out)+'\n',encoding='utf-8')
     print(json.dumps({'operaciones_api':len(rows),'archivos_inventariados':len(files),'swagger_coincide':verified,'referencia':ref},ensure_ascii=False))
 
 if __name__=='__main__':main()

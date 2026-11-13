@@ -3,13 +3,29 @@
 Actualizado: 2026-11-13 (America/Bogota). **V4 EN CURSO. No declarar terminada todavía.**
 
 ## Continuación V4 solicitada
-El usuario pidió cumplir solamente lo especificado para V4. La fase V2 siguiente se conserva como historial. HEAD inicial V4: 431dcb4cc3846ec238cec653fc761bbe01d1ef44. Rama y PR personal existentes, sin fusionar.
+El usuario pidió cumplir solamente lo especificado para V4. La fase V2 siguiente se conserva como historial. HEAD inicial V4: 431dcb4cc3846ec238cec653fc761bbe01d1ef44. Rama deploy/neon-render-spec-kit-v2 y PR personal #1 existentes, sin fusionar.
 
-Fallo real detectado en navegador: /_framework/blazor.web.js devuelve 404 en producción .NET 10; SSR muestra reportes pero los clics no ejecutan eventos. Corregido App.razor para resolver @Assets["_framework/blazor.web.js"] según Microsoft Learn .NET 10. Pendiente: compilar imagen de producción, comprobar script, commit/push y desplegar SOLO frontend existente, probar interacción de diez reportes/CSV/dashboard/móvil, preparar Spec Kit y mapa V4, actualizar PR y empaquetar outputs/V4.
+### Completado en esta continuación
+- Detectado en navegador real: los reportes SSR aparecen, pero R2 no cambia al hacer clic. El script /_framework/blazor.web.js devolvía 404.
+- Commit 31c9569426fdfd89d7667af9cbd6d6d159d243f0: App.razor usa @Assets para resolver el fingerprint; nueva prueba pruebas_humo/validar_arranque_blazor.py. La primera corrección sola no bastó: el despliegue dep-dbrkgaom7kps73cgqe9g quedó live pero la prueba siguió roja.
+- Causa adicional comprobada en patrón Docker: restore ocurre antes de copiar .razor y omite los recursos internos de ASP.NET. Commit 674eb9e35001047fed54cd4140f25085701c1dc9: RequiresAspNetWebAssets=true y guard test -s del script publicado en Dockerfile.render.
+- Frontend existente actualizado: dep-dbrkhe3m8hqs73d2ooa0, commit 674eb9e35001047fed54cd4140f25085701c1dc9, LIVE confirmado. Script real _framework/blazor.web.whefm3rrpu.js responde 200 text/javascript, 200645 bytes. Prueba de arranque ahora verde.
+- API y Neon sin modificaciones. No se aplicaron migraciones ni semillas nuevas. No se crearon recursos ni costes.
+- publicacion/generar_mapa_v2.py preparado con --revision v4 (v2 sigue por defecto); sintaxis Python comprobada, pero mapa y Spec Kit V4 TODAVÍA NO GENERADOS.
 
-Las suites HTTP anteriores no verificaban el arranque JavaScript; WSS negociado por cliente de prueba tampoco demostraba que el navegador iniciara Blazor. No presentar esos checks como evidencia de botones. Captura preliminar dashboard-375.jpg en outputs/V4/evidencias; aún no prueba de aceptación final.
+### Interrupción y próxima tarea exacta
+La sesión de navegador en la aplicación dejó de estar disponible tras una actualización de herramientas. Inventario actual no expone navegadores DOM. Al seleccionar Chrome por ventana, Computer Use detuvo explícitamente el turno porque no pudo determinar la URL con confianza suficiente para aplicar su política. Se obedeció: no hubo más entradas UI. No sustituirlo por otra técnica de automatización ni eludir esa protección. La compilación local tampoco pudo completarse: Docker no estaba iniciado. La compilación Release y el guard sí pasaron en Render.
 
-Archivos modificados V4 hasta ahora: front_blazor/Components/App.razor, ASTRA_ESTADO_TRABAJO.md y ASTRA_REANUDAR.txt. Consultar git status para cambios posteriores. No cambiar esquema/semillas ni duplicar servicios/proyecto. Al reanudar verificar Git, Neon y Render antes de continuar.
+CONTINUAR: verificar primero Git, Neon y Render existentes. Si Computer Use está disponible de nuevo, iniciar sesión en la aplicación, comprobar los diez botones de reportes con cambio de h2/filas, descargar y validar CSV, actualizar dashboard y abrir sus seis tablas de datos, inspeccionar móvil 360/375 y escritorio, impresión/PWA según capacidades. Las capturas preliminares en outputs/V4/evidencias no prueban interacción posterior al arreglo. Después completar docs/spec_kit/versiones/v4_neon_render, MAPA_COMPLETO_PROYECTO_V4.txt, informe/checklist/estado V4, PR y paquete outputs/V4. Conservar v4_publicacion y V2 históricos; no añadir funciones fuera del enunciado.
+
+### Archivos de esta fase y evidencias
+App.razor, FrontInnovacion.csproj, Dockerfile.render; pruebas_humo/validar_arranque_blazor.py; publicacion/generar_mapa_v2.py; ASTRA_ESTADO_TRABAJO.md y ASTRA_REANUDAR.txt. Último commit de aplicación: 674eb9e35001047fed54cd4140f25085701c1dc9. El commit que contiene este checkpoint se consulta con git rev-parse HEAD.
+
+Fuentes primarias del arreglo:
+- https://learn.microsoft.com/en-us/aspnet/core/blazor/project-structure?view=aspnetcore-10.0
+- https://github.com/dotnet/aspnetcore/issues/69341
+
+Las suites HTTP anteriores no probaban el arranque JS; el handshake WSS tampoco demuestra que el navegador inicie Blazor. No afirmar que los diez botones o el CSV están ya validados después del arreglo.
 
 ## Historial fase V2
 
