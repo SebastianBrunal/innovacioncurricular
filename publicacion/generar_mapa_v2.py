@@ -77,7 +77,7 @@ def endpoints():
             rows.append(dict(method=a[1].upper(),route=canonical(declared),declared=declared,path=path,line=line_at(s,a.start()+len(a[0])-len(a[0].lstrip())),function=name,service=servicefile,service_methods=smethods,repositories=reps,model=model,tables=tables,auth=auth,tests=tests,description=desc,component='API'))
     s=read('api_innovacion/Program.cs')
     for a in re.finditer(r'app\.MapGet\("([^"]*)"',s):
-        rows.append(dict(method='GET',route=a[1],declared=a[1],path='api_innovacion/Program.cs',line=line_at(s,a.start()),function='lambda MapGet',service='Infraestructura inline / configuración',service_methods=[],repositories=[],model='Ninguno (health consulta historial o rol)',tables=['astra_migraciones','rol'] if a[1]=='/health' else [],auth='Anónimo',tests=['docs/VALIDACION_NEON_RENDER_V2.md'],description='Conexión e historial de migraciones' if a[1]=='/health' else 'Diagnóstico de versión sin tocar la base',component='API'))
+        rows.append(dict(method='GET',route=a[1],declared=a[1],path='api_innovacion/Program.cs',line=line_at(s,a.start()),function='lambda MapGet',service='Infraestructura inline / configuración',service_methods=[],repositories=[],model='DTO diagnóstico inline; sin modelo de dominio',tables=['astra_migraciones','rol'] if a[1]=='/health' else [],auth='Anónimo',tests=['pruebas_humo/validar_runtime_produccion.py' if a[1]=='/health' else 'pruebas_humo/humo_seguridad.py'],description='Conexión e historial de migraciones' if a[1]=='/health' else 'Diagnóstico de versión sin tocar la base',component='API'))
     return sorted(rows,key=lambda x:(x['route'],x['method']))
 
 def main():
@@ -119,7 +119,7 @@ def main():
           'Repositorios: '+('; '.join(x['repositories']) or 'No aplica'),
           'Modelo/DTO: '+x['model'],'Tablas relacionadas: '+(', '.join(x['tables']) or 'Ninguna identificada; consultar el repositorio/controlador'),
           'Middleware/autorización: '+x['auth']+('; validación ApiController 422 y filtro de errores 500 en MVC' if '/Controllers/' in x['path'] else '; endpoint mínimo fuera del filtro MVC, errores health controlados'),
-          'Pruebas relacionadas: '+('; '.join(x['tests']) or 'api_innovacion/pruebas; sin prueba HTTP individual localizada'),
+          'Pruebas relacionadas: '+('; '.join(x['tests']) or 'api_innovacion/pruebas/PruebaDeCapas.cs (ejecutador; sin prueba HTTP individual localizada)'),
           'Documentación: '+SPEC+'/6_contracts.md; openapi.local.json; docs/VALIDACION_NEON_RENDER_V2.md',
           'GitHub: '+source_url(ref,x['path'],x['line']),
           'Estado: IMPLEMENTADO; CONTRATO COMPARADO CON SWAGGER EJECUTADO. Cobertura funcional por operación: consultar las pruebas relacionadas y el informe; no se atribuye una prueba individual sin evidencia.']
@@ -129,20 +129,28 @@ def main():
             s=read(f)
             for a in re.finditer(r'^@page "([^"]+)"',s,re.M):
                 auth='Cookie de sesión y AuthorizeRouteView' if '[Authorize' in s else 'Página pública'
-                out += [f'ENDPOINT: GET {a[1]} [FRONTEND]','Archivo: '+f,f'Línea: {line_at(s,a.start())}',f'Función: componente {Path(f).stem}; servicio(s): '+', '.join(re.findall(r'@inject\s+(\w+)',s)),
-                        'Autorización: '+auth,'Pruebas: pruebas_humo/humo_front.py, humo_roles_front.py y humo_reportes.py (ver alcance en informe).',
+                out += [f'ENDPOINT: GET {a[1]} [FRONTEND]','Descripción: página/componente '+Path(f).stem,'Archivo: '+f,f'Línea: {line_at(s,a.start())}',f'Función: componente {Path(f).stem}; servicio(s): '+(', '.join(re.findall(r'@inject\s+(\w+)',s)) or 'markup estático'),
+                        'Modelo/tabla: DTO del componente/servicio frontend; sin acceso directo a tablas. Datos a través de las rutas API relacionadas.',
+                        'Autorización: '+auth+'; atributos: '+('; '.join(re.findall(r'^@attribute (.*)',s,re.M)) or 'sin atributo adicional'),
+                        'Pruebas: pruebas_humo/humo_front.py, humo_roles_front.py y humo_reportes.py (ver alcance en informe).',
+                        'Documentación: '+SPEC+'/3_plan.md; DESPLIEGUE_NEON_RENDER.md; docs/VALIDACION_NEON_RENDER_V2.md.',
+                        'Estado: IMPLEMENTADO Y COMPILADO; cobertura asociada en suites, sin afirmación de cada interacción visual.',
                         'GitHub: '+source_url(ref,f,line_at(s,a.start()))]
     for f in ['front_blazor/Program.cs','front_blazor/Ensamblador/EnsambladorSesion.cs']:
         s=read(f)
         for a in re.finditer(r'app\.Map(Get|Post)\("([^"]+)"',s):
-            out += [f'ENDPOINT: {a[1].upper()} {a[2]} [FRONTEND]',f'Archivo: {f}; línea: {line_at(s,a.start())}',
+            out += [f'ENDPOINT: {a[1].upper()} {a[2]} [FRONTEND]',f'Descripción: gestión de sesión o diagnóstico; archivo: {f}; línea: {line_at(s,a.start())}',
                     'Función: lambda Map'+a[1]+'; sesión cookie/antifalsificación en logout, diagnóstico público en health.',
+                    'Servicio/modelo/tabla: autenticación Cookie y almacén en memoria; sin tablas directas.',
+                    'Pruebas: pruebas_humo/humo_roles_front.py; validar_runtime_produccion.py. Documentación: '+SPEC+'/3_plan.md y DESPLIEGUE_NEON_RENDER.md.',
+                    'Estado: IMPLEMENTADO; login/logout y health ejercitados en suites públicas.',
                     'GitHub: '+source_url(ref,f,line_at(s,a.start()))]
     s=read('api_innovacion/Program.cs')
     for route,method in [('/swagger','UseSwaggerUI'),('/swagger/index.html','UseSwaggerUI'),('/swagger/v1/swagger.json','UseSwagger')]:
         pos=s.index('app.'+method+'(')
         out += [f'ENDPOINT: GET {route} [MIDDLEWARE SWASHBUCKLE]',f'Archivo: api_innovacion/Program.cs; línea: {line_at(s,pos)}; función: {method}()',
-                'Autorización: anónimo; modelos/tablas: ninguno; pruebas: humo_reportes.py y exportación OpenAPI local.',
+                'Autorización: anónimo; modelos/tablas: ninguno; pruebas: humo_reportes.py y exportación OpenAPI del backend ejecutado.',
+                'Servicio/función: middleware Swashbuckle.AspNetCore; documentación: '+SPEC+'/6_contracts.md; estado: IMPLEMENTADO y contrato exportado del servidor ejecutado.',
                 'GitHub: '+source_url(ref,'api_innovacion/Program.cs',line_at(s,pos))]
     out += ['ENDPOINT: POST /_blazor/negotiate?negotiateVersion=1 [TRANSPORTE SIGNALR]',
             'ENDPOINT: GET /_blazor?id={connectionToken} [UPGRADE A WSS; token efímero no documentado]',
@@ -189,7 +197,7 @@ def main():
             out.append(f'{f} | {len(s.splitlines())} líneas | {title}')
     out+=['\nH. DOCUMENTACIÓN SPEC KIT V2',SPEC+'/','Constitución: docs/spec_kit/1_constitution.md (1.6.0 en revisión); versiones históricas preservadas.',
           '2_spec: requisitos y estados; 3_plan: arquitectura; 4_research: decisiones; 5_data_model: 25 tablas; 6_contracts + openapi.local.json: API real; 7_quickstart: operación; 8_tasks: estado; 9_checklist: aceptación.',
-          '\nI. PRUEBAS Y RESULTADOS','Ver docs/VALIDACION_NEON_RENDER_V2.md: distingue capas, HTTP local, migraciones, compilación y pruebas pendientes públicas. No atribuir pruebas locales a Neon/Render.',
+          '\nI. PRUEBAS Y RESULTADOS','Ver docs/VALIDACION_NEON_RENDER_V2.md: distingue capas, HTTP local, migraciones, compilación y pruebas públicas ejecutadas y límites de cobertura. No atribuir pruebas locales a Neon/Render.',
           '\nJ. DESPLIEGUE EN NEON Y RENDER','DESPLIEGUE_NEON_RENDER.md; render.yaml; api_innovacion/Dockerfile.render; front_blazor/Dockerfile.render; publicacion/.env.neon.example; db/postgres.',
           'Frontend: '+estado.get('frontend',{}).get('url','sin verificar')+'; backend: '+estado.get('backend',{}).get('url','sin verificar'),
           'Neon: '+estado.get('neon',{}).get('project_id','sin verificar')+'; base: '+estado.get('neon',{}).get('database','sin verificar')+'. No se modificó MonsterASP ni el servicio inventario de Render.',
