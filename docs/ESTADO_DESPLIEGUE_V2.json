@@ -1,0 +1,85 @@
+{
+  "fecha": "2026-11-13",
+  "zona_horaria": "America/Bogota",
+  "repositorio": "https://github.com/SebastianBrunal/innovacioncurricular",
+  "upstream": "https://github.com/MrEpia/innovacioncurricular",
+  "rama": "deploy/neon-render-spec-kit-v2",
+  "verificado_publicamente": true,
+  "runtime_commit": "5e1e0023e1fa79b30d45003041dc33b4fbc3c694",
+  "backend": {
+    "url": "https://innovacion-curricular-api-v2-e3wi.onrender.com",
+    "service_id": "srv-dbrbnortqb8s73e3igt0",
+    "deploy_id": "dep-dbrbq1t6e07s73b6kdpg",
+    "estado": "live",
+    "plan": "free",
+    "health_path": "/health",
+    "health_http": 200
+  },
+  "frontend": {
+    "url": "https://innovacion-curricular-front-v2-e3wi.onrender.com",
+    "service_id": "srv-dbrbnv6i0phs73fcvabg",
+    "deploy_id": "dep-dbrbq1t6e07s73b6kdn0",
+    "estado": "live",
+    "plan": "free",
+    "health_path": "/health",
+    "health_http": 200,
+    "cookie_secure": true,
+    "cookie_http_only": true,
+    "wss_blazorpack": true
+  },
+  "neon": {
+    "project_id": "lingering-dream-80917462",
+    "branch_id": "br-morning-block-bckftle6",
+    "database": "innovacion_curricular",
+    "pg_version": 16,
+    "plan": "free",
+    "region": "aws-us-east-1",
+    "tablas_funcionales": 25,
+    "tablas_con_historial": 26,
+    "foreign_keys": 24,
+    "primary_keys_con_historial": 26,
+    "unique_constraints": 3,
+    "check_constraints": 25,
+    "restricciones_validadas": true,
+    "funciones_atomicas": 29,
+    "migraciones": 4,
+    "rol_aplicacion": "innovacion_app",
+    "rol_superuser": false,
+    "rol_createdb": false,
+    "rol_createrole": false,
+    "tls_cliente": "VerifyFull"
+  },
+  "render_blueprint": {
+    "id": "exs-dbrbpr8u01pc73apl680",
+    "auto_sync": false,
+    "estado_control": "paused (autoSync desactivado; servicios live)",
+    "planes_previos_no_aprobar": [
+      "exs-dbrbj3gae00c73f6ecfg",
+      "exs-dbrbn3s9v7es73c4edq0"
+    ]
+  },
+  "validacion": {
+    "capas": 194,
+    "humo_local": 364,
+    "humo_publico": 359,
+    "suites_publicas": 8,
+    "fallos_publicos": 0,
+    "omision_publica": "1 bloque: no interrumpir API en Render; comprobado localmente",
+    "operaciones_api_contrastadas": 163,
+    "websocket_handshakes": 2,
+    "cookies_seguras": true
+  },
+  "limitaciones": [
+    "Sesiones y claves DataProtection en memoria/almacenamiento efímero: reinicios pueden cerrar sesión.",
+    "Sin pruebas de carga ni garantía SLA; límites de planes gratuitos del proveedor.",
+    "No se automatizó cada interacción visual de botones Blazor; sí formulario HTTP, datos, permisos, logout, WSS y cookie.",
+    "Datos de demostración ficticios; SQL Server/MonsterASP originales conservados, sin transferencia de datos reales."
+  ],
+  "pull_request": {
+    "url": "https://github.com/SebastianBrunal/innovacioncurricular/pull/1",
+    "estado": "OPEN",
+    "borrador": true,
+    "fusionado": false
+  },
+  "mision_tecnica_completada": true
+}

@@ -1,5 +1,7 @@
 # Módulo Innovación Curricular
 
+Despliegue actual de la copia personal: [abrir aplicación](https://innovacion-curricular-front-v2-e3wi.onrender.com) · [API](https://innovacion-curricular-api-v2-e3wi.onrender.com) · [guía Neon/Render](DESPLIEGUE_NEON_RENDER.md).
+
 Proyecto de aula del curso de Diseño de Software: el módulo **Innovación
 Curricular** del Sistema de Gestión de Información del Conocimiento
 Universitario, para la *Universidad Monte Verde* (institución ficticia del
@@ -20,7 +22,7 @@ curso).
 | 3 — maestro-detalle | Registro calificado y programa guardados con todo su detalle (todo o nada) | [v3_maestro_detalle](docs/spec_kit/versiones/v3_maestro_detalle/2_spec.md) |
 | 4 — v4 | 10 consultas multitabla, dashboard, sitio corporativo con la imagen del manual, responsive, PWA y publicación | [v4_publicacion](docs/spec_kit/versiones/v4_publicacion/2_spec.md) |
 
-## Sitio publicado
+## Sitio publicado de la entrega histórica (MonsterASP)
 
 | | URL |
 |---|---|
@@ -137,3 +139,22 @@ de git (`git config user.name` / `user.email` **sin** `--global`, dentro de su
 carpeta) y sube su rama; el encargado del `main` integra y, al pasar los
 criterios, pone el tag de la versión. El reparto y el orden de cada entrega
 están en el `8_tasks.md` de su versión.
+
+## Revisión V2 desplegada — Neon y Render
+
+La copia personal solicitada está en [https://github.com/SebastianBrunal/innovacioncurricular](https://github.com/SebastianBrunal/innovacioncurricular); conserva el historial y los créditos del equipo original. Se mantiene la V2 histórica y se agrega [Spec Kit V2 Neon/Render](docs/spec_kit/versiones/v2_neon_render/2_spec.md) sobre el código V4.
+
+| Servicio actual | URL |
+|---|---|
+| Frontend | [https://innovacion-curricular-front-v2-e3wi.onrender.com](https://innovacion-curricular-front-v2-e3wi.onrender.com) |
+| API | [https://innovacion-curricular-api-v2-e3wi.onrender.com](https://innovacion-curricular-api-v2-e3wi.onrender.com) |
+| Swagger | [Contratos interactivos](https://innovacion-curricular-api-v2-e3wi.onrender.com/swagger) |
+
+Neon PostgreSQL 16 y ambos servicios Render free verificados. 359 comprobaciones públicas aprobadas, además de las pruebas locales y de capas. Las credenciales están fuera de Git.
+
+- [Despliegue y migraciones](DESPLIEGUE_NEON_RENDER.md).
+- [Auditoría](docs/AUDITORIA_NEON_RENDER_V2.md) y [validación](docs/VALIDACION_NEON_RENDER_V2.md).
+- [Mapa completo de archivos, funciones y endpoints](MAPA_COMPLETO_PROYECTO_V2.txt).
+- [Estado persistente](ASTRA_ESTADO_TRABAJO.md) e [instrucción CONTINUAR](ASTRA_REANUDAR.txt).
+
+El sitio MonsterASP anterior se conserva. El PR de esta revisión queda sin fusión automática.
