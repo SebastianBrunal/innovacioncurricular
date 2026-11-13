@@ -18,7 +18,7 @@ from comun import esperar, leer_env, llave_aleatoria, revisar, terminar
 def sql(consulta):
     """Ejecuta SQL en el contenedor de SQL Server con la clave del .env y
     devuelve (código de salida, salida)."""
-    if os.environ.get("PRUEBAS_PG_CONTENEDOR"):
+    if os.environ.get("PRUEBAS_PG_CONTENEDOR") or os.environ.get("PRUEBAS_PG_ARCHIVO"):
         from comun import sql_postgres_prueba
         return sql_postgres_prueba(consulta)
     salida = subprocess.run(
@@ -110,7 +110,7 @@ revisar(ficha and [a["areaConocimiento"] for a in ficha["areasConocimiento"]] ==
 # ------------------------------------------------------------------ todo o nada
 print("\n-- TODO O NADA dentro del procedimiento (sin pasar por el servicio)")
 R2 = R + 1
-if os.environ.get("PRUEBAS_PG_CONTENEDOR"):
+if os.environ.get("PRUEBAS_PG_CONTENEDOR") or os.environ.get("PRUEBAS_PG_ARCHIVO"):
     codigo, salida = sql(
         f"SELECT sp_registro_calificado_completo_crear({R2},'1','1','1','X','2024-01-01','2025-01-01',"
         f"'1','2','X',{P0},'[{EN1}]','[{{\"id\":{ACT1},\"componente\":\"A\",\"semestre\":\"1\"}},"

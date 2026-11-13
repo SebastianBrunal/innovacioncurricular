@@ -5,7 +5,7 @@ from urllib.parse import quote
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = 'docs/spec_kit/versiones/v2_neon_render'
-REPO = 'https://github.com/MrEpia/innovacioncurricular'
+REPO = 'https://github.com/SebastianBrunal/innovacioncurricular'
 
 def git(*args):
     return subprocess.check_output(['git', *args], cwd=ROOT, text=True).strip()

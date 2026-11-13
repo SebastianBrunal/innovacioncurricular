@@ -43,7 +43,7 @@ def token_a_mano(secreto, minutos_desde_ahora, roles=("administrador",)):
 
 
 def hash_en_base(username):
-    if os.environ.get("PRUEBAS_PG_CONTENEDOR"):
+    if os.environ.get("PRUEBAS_PG_CONTENEDOR") or os.environ.get("PRUEBAS_PG_ARCHIVO"):
         from comun import sql_postgres_prueba
         return sql_postgres_prueba("SELECT password FROM usuario WHERE username = '" + username.replace("'", "''") + "'")[1]
     clave_sa = leer_env("MSSQL_SA_PASSWORD")

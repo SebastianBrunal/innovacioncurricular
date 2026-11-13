@@ -14,6 +14,7 @@ import os
 import random
 import sys
 import subprocess
+import re
 import urllib.error
 import urllib.request
 
@@ -53,6 +54,22 @@ def iniciar_sesion(usuario, clave):
 
 def sql_postgres_prueba(consulta):
     """Solo laboratorio Docker explícito; nunca selecciona un contenedor existente por defecto."""
+    if os.environ.get("PRUEBAS_PG_ARCHIVO"):
+        # Validación remota explícita: el entorno privado nunca se imprime ni va en argumentos.
+        with open(os.environ["PRUEBAS_PG_ARCHIVO"], encoding="utf-8") as archivo:
+            cadena = next(linea.split("=", 1)[1].strip() for linea in archivo if linea.startswith("ConnectionStrings__Postgres="))
+        campos = {}
+        for clave, valor in re.findall(r'(Host|Port|Database|Username|Password)=("(?:[^"]|"")*"|[^;]*)', cadena):
+            campos[clave] = valor[1:-1].replace('""', '"') if valor.startswith('"') else valor
+        entorno = dict(os.environ, PGPASSWORD=campos["Password"])
+        comando = ["docker", "run", "--rm", "-i", "--env", "PGPASSWORD",
+                   "--env", "PGSSLMODE=verify-full", "--env", "PGSSLROOTCERT=/etc/ssl/certs/ca-certificates.crt",
+                   "postgres:16-alpine", "psql", "-h", campos["Host"], "-p", campos.get("Port", "5432"),
+                   "-U", campos["Username"], "-d", campos["Database"], "-X", "-t", "-A",
+                   "-v", "ON_ERROR_STOP=1", "-v", "VERBOSITY=verbose"]
+        salida = subprocess.run(comando, env=entorno, input=consulta, capture_output=True,
+                                text=True, encoding="utf-8", errors="replace")
+        return salida.returncode, (salida.stdout + salida.stderr).strip()
     contenedor = os.environ["PRUEBAS_PG_CONTENEDOR"]
     salida = subprocess.run(
         ["docker", "exec", "-i", contenedor, "psql", "-U", "astra", "-d", "innovacion_neon_v2",

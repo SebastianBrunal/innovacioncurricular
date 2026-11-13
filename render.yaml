@@ -2,7 +2,7 @@
 # Crear recursos separados. Mantener inventario/MonsterASP intactos.
 services:
   - type: web
-    name: innovacion-curricular-api-v2
+    name: innovacion-curricular-api-v2-e3wi
     runtime: docker
     plan: free
     region: virginia
@@ -19,7 +19,7 @@ services:
       - key: ConnectionStrings__Postgres
         sync: false
       - key: Jwt__Secreto
-        generateValue: true
+        sync: false
       - key: AdminInicial__Usuario
         sync: false
       - key: AdminInicial__Correo
@@ -27,7 +27,7 @@ services:
       - key: AdminInicial__Clave
         sync: false
   - type: web
-    name: innovacion-curricular-front-v2
+    name: innovacion-curricular-front-v2-e3wi
     runtime: docker
     plan: free
     region: virginia
@@ -40,4 +40,4 @@ services:
       - key: ASPNETCORE_ENVIRONMENT
         value: Production
       - key: UrlApi
-        sync: false
+        value: https://innovacion-curricular-api-v2-e3wi.onrender.com

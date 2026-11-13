@@ -297,32 +297,35 @@ print("    (la pantalla espera su tiempo de espera, unos diez segundos)")
 # más fiel— que la API esté caída o colgada: en los dos casos el front se
 # queda sin datos y tiene que sostenerse solo.
 # ======================================================================
-subprocess.run(comando_compose + ["pause", SERVICIO_API],
-               capture_output=True, text=True)
-try:
-    time.sleep(2)
-
-    c, t = ver(f"{FRONT}/aliados")
-    texto = visible(t)
-    revisar("la pantalla SIGUE respondiendo con la API sin responder", c == 200)
-    revisar("  y muestra el aviso dentro de la aplicación",
-            "no está disponible" in texto)
-    revisar("  con su menú y su marco intactos",
-            "Aliados" in texto and "Innovación curricular" in texto)
-    # SQL Server sigue encendido y con la ficha adentro. Si el front pudiera
-    # llegar a la base por su cuenta, se seguiría viendo. No se ve.
-    revisar("  y SIN datos: el front no puede llegar a la base por su cuenta",
-            str(TESTIGO) not in texto)
-
-finally:
-    subprocess.run(comando_compose + ["unpause", SERVICIO_API],
+if os.environ.get("PRUEBAS_NO_PAUSAR") == "1":
+    print("[OMITIDA] La interrupción de API solo se prueba en el laboratorio local; no se pausa Render.")
+else:
+    subprocess.run(comando_compose + ["pause", SERVICIO_API],
                    capture_output=True, text=True)
+    try:
+        time.sleep(2)
 
-print("    API descongelada; responde enseguida")
-esperar_api(60)
-c, t = ver(f"{FRONT}/aliados")
-revisar("y al volver la API, la pantalla vuelve a traer los datos",
-        str(TESTIGO) in visible(t))
+        c, t = ver(f"{FRONT}/aliados")
+        texto = visible(t)
+        revisar("la pantalla SIGUE respondiendo con la API sin responder", c == 200)
+        revisar("  y muestra el aviso dentro de la aplicación",
+                "no está disponible" in texto)
+        revisar("  con su menú y su marco intactos",
+                "Aliados" in texto and "Innovación curricular" in texto)
+        # SQL Server sigue encendido y con la ficha adentro. Si el front pudiera
+        # llegar a la base por su cuenta, se seguiría viendo. No se ve.
+        revisar("  y SIN datos: el front no puede llegar a la base por su cuenta",
+                str(TESTIGO) not in texto)
+
+    finally:
+        subprocess.run(comando_compose + ["unpause", SERVICIO_API],
+                       capture_output=True, text=True)
+
+    print("    API descongelada; responde enseguida")
+    esperar_api(60)
+    c, t = ver(f"{FRONT}/aliados")
+    revisar("y al volver la API, la pantalla vuelve a traer los datos",
+            str(TESTIGO) in visible(t))
 
 # ----------------------------------------------------------------------
 # Se retira la ficha de la corrida

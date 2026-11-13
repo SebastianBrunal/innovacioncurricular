@@ -19,7 +19,7 @@ from comun import api, esperar, llave_aleatoria, revisar, terminar
 def activo_en_base(tabla, columna, llave):
     """Lee la columna `activo` directamente en SQL Server (criterio 8). Usa la
     clave del .env: el guion no la tiene escrita."""
-    if os.environ.get("PRUEBAS_PG_CONTENEDOR"):
+    if os.environ.get("PRUEBAS_PG_CONTENEDOR") or os.environ.get("PRUEBAS_PG_ARCHIVO"):
         from comun import sql_postgres_prueba
         return sql_postgres_prueba(f"SELECT activo FROM {tabla} WHERE {columna} = {int(llave)}")[1]
     clave = None
