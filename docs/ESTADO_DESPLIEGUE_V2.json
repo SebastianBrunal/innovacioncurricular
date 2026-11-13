@@ -74,5 +74,12 @@
     "Sin pruebas de carga ni garantía SLA; límites de planes gratuitos del proveedor.",
     "No se automatizó cada interacción visual de botones Blazor; sí formulario HTTP, datos, permisos, logout, WSS y cookie.",
     "Datos de demostración ficticios; SQL Server/MonsterASP originales conservados, sin transferencia de datos reales."
-  ]
+  ],
+  "pull_request": {
+    "url": "https://github.com/SebastianBrunal/innovacioncurricular/pull/1",
+    "estado": "OPEN",
+    "borrador": true,
+    "fusionado": false
+  },
+  "mision_tecnica_completada": true
 }

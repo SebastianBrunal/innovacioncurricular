@@ -1,6 +1,6 @@
 # ASTRA — punto de control persistente
 
-Actualizado: 2026-11-13 (America/Bogota). **Neon y Render desplegados y verificados; cierre documental/PR en curso.**
+Actualizado: 2026-11-13 (America/Bogota). **MISIÓN TÉCNICA COMPLETADA Y VERIFICADA. PR abierto en borrador, sin fusionar.**
 
 ## Objetivo y repositorios
 Completar despliegue real, pruebas, Spec Kit V2 y MAPA_COMPLETO_PROYECTO_V2.txt conservando arquitectura y trabajo colaborativo.
@@ -10,11 +10,13 @@ Completar despliegue real, pruebas, Spec Kit V2 y MAPA_COMPLETO_PROYECTO_V2.txt 
 - Copia local: `C:/Users/USER/Documents/Codex/2026-11-13/14-continuidad-autom-tica-por-l/work/innovacioncurricular`.
 - Rama: deploy/neon-render-spec-kit-v2; tracking personal/deploy/neon-render-spec-kit-v2.
 - main personal es copia exacta de main original en 24abf0491b5f29aaf0ec346a489570b58140aafa. Ninguna main modificada después de la copia. Tags originales v1–v4 preservados. Sin force push.
-- Último commit antes de este checkpoint: 61af4239c51c97e0dd0dfc857ece7993b7dc66d6. Consultar git rev-parse HEAD para el commit que contiene el propio punto de control.
-- PR: pendiente crear borrador en el repositorio personal; no fusionar.
+- Último commit antes del checkpoint final: 5c6380a0b31343e928879d6190dbe2ad8d952cfc. Consultar git rev-parse HEAD para el commit que contiene el propio punto de control.
+- PR: https://github.com/SebastianBrunal/innovacioncurricular/pull/1, OPEN y DRAFT; no fusionar automáticamente.
 
 ## Fase y próxima acción exacta
-Fases 1–8 completadas, despliegue y pruebas públicas aprobados. Fase 9: regenerar y verificar mapa final contra un commit que incluya los documentos. Fase 10: confirmar documentación, crear PR borrador personal, registrar su URL y subir el checkpoint final. No repetir migraciones, crear más servicios o aprobar planes antiguos.
+Fases 1–10 completadas. Mapa completo generado, 163 operaciones contrastadas con Swagger público y 232 referencias con SHA/líneas verificadas. Documentación, commits y PR preparados para revisión. Falta únicamente confirmar/subir este último checkpoint y comprobar estado limpio/remoto; luego no hay trabajo autónomo pendiente. La revisión/fusión es una acción humana posterior, no se ejecuta automáticamente.
+
+Si el usuario escribe CONTINUAR después del cierre, revalidar primero Git, Neon y Render y esperar una nueva instrucción si no hay cambios o fallos. No duplicar recursos ni repetir suites sin justificación.
 
 ## Completado y pruebas
 - Auditoría inicial: 519 archivos y 91 Markdown del origen; arquitectura C# ASP.NET Core 10 + Dapper + SQL Server y Blazor Server descubierta, no reconstruida.
@@ -65,7 +67,7 @@ Fuera del repositorio: ../.env.neon (owner de migración), ../.env.render-privad
 ## Limitaciones y continuidad
 Sesiones/DataProtection efímeros: reinicios pueden cerrar sesión. Sin pruebas de carga/SLA ni automatización visual de cada botón; sí formularios HTTP, datos, permisos, WSS y cookies. Los planes gratuitos tienen sus límites del proveedor. No son bloqueos del despliegue verificado.
 
-No se configuró reactivación automática por cuota, ni se alteraron cuotas, ni se crearon bucles o automaciones. Si se interrumpe antes del cierre, escribir CONTINUAR. Al reanudar: leer estado y ASTRA_REANUDAR; comprobar Git, Neon y Render antes de actuar; retomar solo la tarea exacta pendiente y preservar cambios nuevos.
+No se configuró reactivación automática por cuota, ni se alteraron cuotas, ni se crearon bucles o automaciones. Si la sesión se interrumpe, escribir CONTINUAR. Al reanudar: leer estado y ASTRA_REANUDAR; comprobar Git, Neon y Render antes de actuar; retomar solo la tarea exacta pendiente y preservar cambios nuevos.
 
 ## Archivos modificados respecto al main original
 - .dockerignore
@@ -73,6 +75,7 @@ No se configuró reactivación automática por cuota, ni se alteraron cuotas, ni
 - ASTRA_ESTADO_TRABAJO.md
 - ASTRA_REANUDAR.txt
 - DESPLIEGUE_NEON_RENDER.md
+- INFORME_FINAL_V2.md
 - MAPA_COMPLETO_PROYECTO_V2.txt
 - README.md
 - api_innovacion/ApiInnovacion.csproj
