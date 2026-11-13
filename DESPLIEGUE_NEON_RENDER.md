@@ -123,7 +123,7 @@ Se aplicaron 001–003 y la semilla ficticia 004, y se verificaron 26 PK incluid
 
 Los servicios se crearon directamente con sus variables privadas y se adoptaron con el blueprint actual para configurar /health. Los planes anteriores exs-dbrbj3gae00c73f6ecfg y exs-dbrbn3s9v7es73c4edq0 quedaron sin aplicar; NO aprobarlos porque crearían duplicados. El blueprint actual aparece paused por autoSync=false: los dos servicios están live. Antes de una nueva operación, consultar IDs y deploys, no crear recursos por nombre sin comprobarlos.
 
-Los deploys iniciales activos corresponden al commit 0e5e197d239c47be4ea2cfbb65ebb98ad65751df. Las modificaciones posteriores agregan pruebas, datos operativos y documentación; los archivos de API/frontend/esquema no cambiaron. Confirmar esta igualdad mediante git diff si se actualiza la guía. No se necesita volver a compilar por un cambio solo documental.
+Los deploys activos, después de sincronizar los health checks, corresponden al commit 5e1e0023e1fa79b30d45003041dc33b4fbc3c694. Las modificaciones posteriores agregan pruebas, datos operativos y documentación; los archivos de API/frontend/esquema no cambiaron. Confirmar esta igualdad mediante git diff si se actualiza la guía. No se necesita volver a compilar por un cambio solo documental.
 
 La contraseña del administrador inicial y el JWT están guardados en un archivo privado fuera de Git; no se incluyen en este informe, mapa ni logs. Ver el punto de control local para ubicarlo.
 

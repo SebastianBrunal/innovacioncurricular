@@ -5,11 +5,11 @@
   "upstream": "https://github.com/MrEpia/innovacioncurricular",
   "rama": "deploy/neon-render-spec-kit-v2",
   "verificado_publicamente": true,
-  "runtime_commit": "0e5e197d239c47be4ea2cfbb65ebb98ad65751df",
+  "runtime_commit": "5e1e0023e1fa79b30d45003041dc33b4fbc3c694",
   "backend": {
     "url": "https://innovacion-curricular-api-v2-e3wi.onrender.com",
     "service_id": "srv-dbrbnortqb8s73e3igt0",
-    "deploy_id": "dep-dbrbnp3tqb8s73e3ihl0",
+    "deploy_id": "dep-dbrbq1t6e07s73b6kdpg",
     "estado": "live",
     "plan": "free",
     "health_path": "/health",
@@ -18,7 +18,7 @@
   "frontend": {
     "url": "https://innovacion-curricular-front-v2-e3wi.onrender.com",
     "service_id": "srv-dbrbnv6i0phs73fcvabg",
-    "deploy_id": "dep-dbrbnvei0phs73fcvb30",
+    "deploy_id": "dep-dbrbq1t6e07s73b6kdn0",
     "estado": "live",
     "plan": "free",
     "health_path": "/health",

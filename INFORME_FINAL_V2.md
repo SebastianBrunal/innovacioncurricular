@@ -40,7 +40,7 @@ c0fca5c test: preserve isolated production health and TLS checks
 5c6380a docs: add complete verified project map and public API contracts
 ```
 
-Los deploys activos iniciales usan 0e5e197d239c47be4ea2cfbb65ebb98ad65751df. Se comprobó que API, frontend y scripts de esquema de ese commit son idénticos a la entrega posterior; los cambios siguientes son pruebas/configuración operativa/documentación. Los health checks de hosting se configuraron al adoptar los servicios con el blueprint actual.
+Los deploys activos, tras sincronizar los health checks, usan 5e1e0023e1fa79b30d45003041dc33b4fbc3c694. Se comprobó que API, frontend y scripts de esquema de ese commit son idénticos a la entrega posterior; los cambios siguientes son pruebas/configuración operativa/documentación. Los health checks de hosting se configuraron al adoptar los servicios con el blueprint actual.
 
 ## Documentación entregada
 

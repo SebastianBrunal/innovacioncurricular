@@ -45,7 +45,7 @@ Si el usuario escribe CONTINUAR después del cierre, revalidar primero Git, Neon
 - Ambos healthCheckPath=/health y autoDeploy=no; frontend UrlApi apunta a la API HTTPS real.
 - Blueprint aplicado: exs-dbrbpr8u01pc73apl680, autoSync=false. Estado de control paused significa sincronización automática desactivada, no servicio apagado.
 - Planes antiguos SIN aplicar: exs-dbrbj3gae00c73f6ecfg y exs-dbrbn3s9v7es73c4edq0. NO aprobarlos: crearían duplicados.
-- Deploy API dep-dbrbnp3tqb8s73e3ihl0 y front dep-dbrbnvei0phs73fcvb30, commit 0e5e197d239c47be4ea2cfbb65ebb98ad65751df. API/frontend/esquema de ese commit son iguales a los del HEAD posterior: solo se añadieron pruebas, configuración operativa y documentación.
+- Deploy API dep-dbrbq1t6e07s73b6kdpg y front dep-dbrbq1t6e07s73b6kdn0, commit 5e1e0023e1fa79b30d45003041dc33b4fbc3c694. API/frontend/esquema de ese commit son iguales a los del HEAD posterior: solo se añadieron pruebas, configuración operativa y documentación.
 - Servicio preexistente inventario srv-cvbh02rtq21c73dv7330 y MonsterASP conservados sin cambios.
 
 ## Fallos investigados y resueltos
