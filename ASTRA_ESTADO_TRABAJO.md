@@ -10,7 +10,7 @@ Completar despliegue real, pruebas, Spec Kit V2 y MAPA_COMPLETO_PROYECTO_V2.txt 
 - Copia local: `C:/Users/USER/Documents/Codex/2026-11-13/14-continuidad-autom-tica-por-l/work/innovacioncurricular`.
 - Rama: deploy/neon-render-spec-kit-v2; tracking personal/deploy/neon-render-spec-kit-v2.
 - main personal es copia exacta de main original en 24abf0491b5f29aaf0ec346a489570b58140aafa. Ninguna main modificada después de la copia. Tags originales v1–v4 preservados. Sin force push.
-- Último commit antes del checkpoint final: 5c6380a0b31343e928879d6190dbe2ad8d952cfc. Consultar git rev-parse HEAD para el commit que contiene el propio punto de control.
+- Último commit de fase antes de este checkpoint: cae9c1db4d4662b49b6100e88acd9aa99f4ca502. Último commit vigente: HEAD (git rev-parse HEAD). Consultar git rev-parse HEAD para el commit que contiene el propio punto de control.
 - PR: https://github.com/SebastianBrunal/innovacioncurricular/pull/1, OPEN y DRAFT; no fusionar automáticamente.
 
 ## Fase y próxima acción exacta
