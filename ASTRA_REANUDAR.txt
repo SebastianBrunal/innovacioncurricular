@@ -1,11 +1,11 @@
-CONTINUAR — misión MrEpia/innovacioncurricular (INCOMPLETA).
-Repositorio local: C:/Users/USER/Documents/Codex/2026-11-13/14-continuidad-autom-tica-por-l/work/innovacioncurricular
-1. Leer primero ASTRA_ESTADO_TRABAJO.md y la misión adjunta del chat.
-2. Ejecutar git status --short --branch; git branch --show-current; git log -5 --oneline; git fetch origin. Revisar diferencias; nunca reset/clean/force push ni sobrescribir trabajo ajeno. Mantener deploy/neon-render-spec-kit-v2 y el PR sin fusionar.
-3. Comprobar el último commit real y si ya están finalizados mapa/PR/checkpoint. Si faltan, completarlos antes de los pasos externos; no duplicar un PR.
-4. Revalidar Neon: el conector devolvió Unknown tool y desapareció. Si ya está conectado, listar proyectos/ramas/bases antes de crear uno nuevo. Solo capacidad gratuita confirmada y base separada; no tocar datos originales.
-5. Revalidar Render: workspace tea-cvbgt23qf0us73d8uuug. No tocar inventario (srv-cvbh02rtq21c73dv7330). El intento de blueprint no devolvió ID y falló HTTP 400 de acceso a repo/branch/file; comprobar recursos/blueprints y resolver acceso del repo privado antes de reintentar. GitHub sí tiene render.yaml en la rama. No cambiar privacidad ni insertar tokens en URLs.
-6. Seguir DESPLIEGUE_NEON_RENDER.md: migrar Neon con TLS VerifyFull y verificar tablas/FK/historial; crear/desplegar los dos Web Services nuevos con secretos fuera de Git; verificar URLs públicas, login, CRUD, roles, maestro-detalle, reportes, dashboard y Blazor.
-7. Pruebas locales YA APROBADAS: 194 de capas, 364 de humo, migraciones/rollback/concurrencia/runtime. Laboratorio propio astra-neon-v2 en 18072/18073; preservar contenedores históricos. Archivo privado local ../pruebas-local.env; no imprimirlo.
-8. Actualizar estado tras cada fase, registrar commit/archivos/pruebas/Neon/Render y próxima acción exacta. Regenerar mapa con líneas reales y ref que contenga los archivos; no inventar resultados públicos.
-No hay reinicio automático de cuota confirmado. CONTINUAR retoma desde este checkpoint cuando la sesión/accesos estén disponibles, sin repetir operaciones verificadas.
+CONTINUAR — Innovación Curricular V2
+Repositorio final: https://github.com/SebastianBrunal/innovacioncurricular
+Local: C:/Users/USER/Documents/Codex/2026-11-13/14-continuidad-autom-tica-por-l/work/innovacioncurricular
+1. Leer ASTRA_ESTADO_TRABAJO.md. Ejecutar git status --short --branch, git log -5 --oneline, git fetch personal y git fetch origin; preservar cualquier cambio nuevo. Mantener deploy/neon-render-spec-kit-v2. No reset/clean/force push ni fusión automática.
+2. Revisar si ya se completaron mapa final, commits y PR. Si falta el cierre, esa es la próxima tarea; las ocho suites públicas ya pasaron y no se deben repetir sin cambios/fallos nuevos.
+3. Verificar Neon existente: lingering-dream-80917462, rama br-morning-block-bckftle6, base innovacion_curricular. Migraciones 001–004 ya aplicadas. No crear otro proyecto ni ejecutar limpieza SQL Server. Conexión privada fuera de Git; app usa innovacion_app, owner solo migraciones.
+4. Verificar Render existente: API srv-dbrbnortqb8s73e3igt0 (https://innovacion-curricular-api-v2-e3wi.onrender.com), front srv-dbrbnv6i0phs73fcvabg (https://innovacion-curricular-front-v2-e3wi.onrender.com), ambos live/free, /health=200, autoDeploy=no. Blueprint ACTIVO exs-dbrbpr8u01pc73apl680, autoSync=false. NO aprobar planes antiguos exs-dbrbj3gae00c73f6ecfg ni exs-dbrbn3s9v7es73c4edq0. No tocar inventario ni MonsterASP.
+5. Fuente desplegada 0e5e197d239c47be4ea2cfbb65ebb98ad65751df; API/frontend/esquema iguales al código posterior. Solo desplegar otra vez si hay cambios de aplicación/configuración que lo justifiquen, comprobando primero deploys en curso.
+6. Credenciales privadas: ../.env.neon y ../.env.render-privado.json; no imprimir ni versionar. Logs/resultados están fuera de Git en work. Pruebas aprobadas: 194 capas, 364 locales, 359 públicas, WSS blazorpack y cookies Secure/HttpOnly.
+7. Actualizar el punto de control y el mapa con evidencia real. Crear/reutilizar un único PR personal; no fusionarlo. Si el cierre ya está verificado, no hay trabajo autónomo pendiente: esperar una nueva solicitud y conservar servicios/datos.
+No existe reactivación automática de cuota confirmada. CONTINUAR permite retomar el mismo chat, verificando el estado real y sin duplicar operaciones.

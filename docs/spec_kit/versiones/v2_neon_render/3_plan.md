@@ -1,6 +1,6 @@
 # Plan técnico — Neon y Render
 
-Estado: implementación local, publicación externa pendiente. El plan preserva la separación y los contratos de V4.
+Estado: implementación local y despliegue público verificados. El plan preserva la separación y los contratos de V4.
 
 ## Arquitectura e implementación
 Controladores MVC → interfaces de servicios → interfaces de repositorios. Los ensambladores históricos registran SQL Server; EnsambladorPostgres reemplaza solo los IRepositorio cuando BaseDatos__Proveedor=Postgres. No hay entidades compartidas entre frontend y API. Repositorios PostgreSQL con consultas explícitas, Npgsql y Dapper; funciones PL/pgSQL para comprobar+retirar, seguridad y maestro-detalle. El SQL Server original no se reescribe.
@@ -19,4 +19,4 @@ La lista exacta de archivos, funciones y enlaces permanentes se genera en MAPA_C
 
 ## Referencia de implementación
 
-Código auditado: https://github.com/MrEpia/innovacioncurricular/tree/1e91a6eea54e690a3faa9637e2c943ef2d2fc5e4 . Las declaraciones específicas y sus líneas se vinculan en 6_contracts.md y MAPA_COMPLETO_PROYECTO_V2.txt; los resultados distinguen verificación local y publicación pendiente.
+Código auditado: https://github.com/SebastianBrunal/innovacioncurricular/tree/1e91a6eea54e690a3faa9637e2c943ef2d2fc5e4 . Las declaraciones específicas y sus líneas se vinculan en 6_contracts.md y MAPA_COMPLETO_PROYECTO_V2.txt; los resultados distinguen verificación local y publicación verificada.

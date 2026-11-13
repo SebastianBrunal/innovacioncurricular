@@ -1,6 +1,6 @@
 # Despliegue en Neon y Render — revisión V2
 
-Estado: **preparación local verificada; despliegue externo pendiente**. No se ha publicado esta revisión ni transferido datos de MonsterASP. Fecha de referencia: 2026-11-13, America/Bogota. El estado más reciente está en ASTRA_ESTADO_TRABAJO.md.
+Estado: **desplegado en Render, conectado a Neon y verificado por HTTPS público**. Se usa la copia personal solicitada por el usuario; no se transfirieron datos de MonsterASP. Fecha de referencia: 2026-11-13, America/Bogota. El estado más reciente está en ASTRA_ESTADO_TRABAJO.md.
 
 ## Arquitectura final preparada
 
@@ -17,15 +17,15 @@ Dos **Web Services Docker**; Blazor Server requiere un servidor .NET y WebSocket
 
 | Recurso | Estado observado |
 |---|---|
-| Frontend de esta revisión en Render | Sin URL pública verificada; pendiente crear/desplegar |
-| Backend de esta revisión en Render | Sin URL pública verificada; pendiente crear/desplegar |
-| Neon | Sin proyecto/base verificados. El conector devolvió Unknown tool y dejó de estar disponible |
-| Render | Conector operativo; workspace My Workspace disponible. create_blueprint devolvió HTTP 400: no pudo acceder al repositorio, rama o archivo privado. No se obtuvo ID de blueprint ni servicio nuevo. Autorizar MrEpia/innovacioncurricular en la integración Git de Render; no publicar el repo ni incrustar tokens. El servicio preexistente inventario pertenece a otro repositorio y no se modifica |
+| Frontend de esta revisión en Render | [https://innovacion-curricular-front-v2-e3wi.onrender.com](https://innovacion-curricular-front-v2-e3wi.onrender.com) · live · free · `srv-dbrbnv6i0phs73fcvabg` |
+| Backend de esta revisión en Render | [https://innovacion-curricular-api-v2-e3wi.onrender.com](https://innovacion-curricular-api-v2-e3wi.onrender.com) · live · free · `srv-dbrbnortqb8s73e3igt0` |
+| Neon | Proyecto `lingering-dream-80917462`, rama `br-morning-block-bckftle6`, base `innovacion_curricular`, PostgreSQL 16, free. Migraciones, TLS y restricciones verificados |
+| Render | Dos servicios nuevos en virginia, healthCheckPath=/health, autoDeploy=no. Blueprint activo `exs-dbrbpr8u01pc73apl680`, autoSync=false. El servicio inventario existente se conservó |
 | Laboratorio API PostgreSQL | http://127.0.0.1:18072 (solo local, no es una URL de producción) |
 | Laboratorio frontend | http://127.0.0.1:18073 (solo local) |
 | MonsterASP anterior | URLs históricas en README.md; no se alteraron ni se presentan como el nuevo despliegue |
 
-La base local tiene 25 tablas funcionales, 24 claves foráneas, claves simples/compuestas y el historial `astra_migraciones`. Hay tres migraciones obligatorias y una opcional con datos ficticios. Esto prueba PostgreSQL local, no prueba Neon. No se ha realizado una exportación de datos de producción.
+La base local tiene 25 tablas funcionales, 24 claves foráneas, claves simples/compuestas y el historial `astra_migraciones`. Hay tres migraciones obligatorias y una opcional con datos ficticios. La misma estructura y las cuatro migraciones se verificaron después en Neon mediante SQL y las ocho suites públicas. No se realizó una exportación de datos de producción.
 
 ## Runtime, compilación y arranque
 
@@ -46,7 +46,7 @@ Inicio: `dotnet ApiInnovacion.dll` y `dotnet FrontInnovacion.dll`. Ambos respeta
 |---|---|
 | `BaseDatos__Proveedor` | `Postgres` en el servicio nuevo; `SqlServer` por defecto |
 | `ConnectionStrings__Postgres` | Cadena Npgsql privada con host, base, rol y contraseña de Neon; `SSL Mode=VerifyFull` obligatorio fuera de Development |
-| `Jwt__Secreto` | Firma HS256, mínimo 32 caracteres; Render puede generarlo |
+| `Jwt__Secreto` | Firma HS256, mínimo 32 caracteres; en el despliegue actual se generó de forma segura fuera de Git |
 | `Jwt__Minutos`, `Jwt__Emisor`, `Jwt__Audiencia` | Opcionales, configuración JWT histórica |
 | `AdminInicial__Usuario`, `AdminInicial__Correo`, `AdminInicial__Clave` | Bootstrap inicial; no sobrescribe un administrador activo existente |
 | `UrlApi` | URL HTTPS real del backend en el frontend Render |
@@ -82,7 +82,7 @@ El migrador es una tarea explícita: no depende de un pre-deploy de pago ni corr
 
 1. Hacer fetch/status y comprobar esta rama y el PR. Subir los cambios de `deploy/neon-render-spec-kit-v2`; no usar main ni fusionar automáticamente.
 2. Verificar servicios existentes. Usar `render.yaml` para dos recursos nuevos en plan free, región virginia, o crear ambos Web Services Docker con los mismos Dockerfile/contexto. El blueprint tiene despliegue automático desactivado; no adoptar servicios ajenos.
-3. Cargar las variables privadas del backend, con Neon ya migrado. Desplegar y esperar el resultado del deploy. Comprobar `GET /health` = 200 (conexión + historial de las tres migraciones obligatorias), `GET /`, Swagger y login/consultas reales. La compilación sola no demuestra éxito.
+3. Cargar las variables privadas del backend, con Neon ya migrado. En la infraestructura actual ya están configuradas; no sobrescribirlas al actualizar. Desplegar y esperar el resultado del deploy. Comprobar `GET /health` = 200 (conexión + historial de las tres migraciones obligatorias), `GET /`, Swagger y login/consultas reales. La compilación sola no demuestra éxito.
 4. Configurar `UrlApi` del frontend con la URL HTTPS efectiva del backend, desplegar el frontend y comprobar formulario de ingreso, páginas por rol, CRUD, reportes y dashboard. Verificar WebSocket de Blazor y cookie Secure en el hosting.
 5. Registrar URLs/IDs/commit efectivo y los resultados públicos en este documento y el punto de control. Si hay autoDeploy activo en un servicio, no disparar un segundo deploy después del push; consultar primero sus deploys.
 
@@ -111,7 +111,21 @@ Para actualizar: revisar cambios del equipo, crear commit en rama de trabajo, co
 
 Resultados detallados: `docs/VALIDACION_NEON_RENDER_V2.md`. Se distinguen pruebas locales de verificaciones externas. Render free puede suspender procesos y el frontend guarda sesiones/JWT en memoria: reinicios cierran sesiones; no hay escalamiento horizontal verificado. La conservación de claves DataProtection entre reemplazos no está configurada. No hay SLA ni mediciones de carga. Las pantallas PWA no prueban escritura autenticada offline.
 
-Pendiente obligatorio: acceso Neon; proyecto/base reales y migraciones verificadas allí; servicios/URLs Render; HTTP público con frontend-backend-Neon; revisión del equipo del PR. Hasta entonces la misión permanece incompleta.
+Criterios técnicos cumplidos: Neon real, dos servicios Render live, HTTPS, 359 comprobaciones públicas, WSS blazorpack y cookie Secure/HttpOnly. PR preparado para revisión humana y sin fusión automática. La revisión humana y la posible fusión son acciones posteriores reservadas al propietario.
+
+### Recursos actuales y operaciones ya ejecutadas
+
+Repositorio de despliegue: https://github.com/SebastianBrunal/innovacioncurricular . Se copiaron main y los tags v1–v4 con el historial original y se subió la rama de trabajo, conservando los créditos del equipo. El remoto original se mantiene como origin y personal apunta a la copia; las últimas publicaciones se hicieron solo a personal. No se fusionó ninguna rama principal.
+
+Se creó Neon tras confirmar plan free y ausencia de un proyecto del mismo nombre. Un intento de ajustar autosuspensión fue rechazado por la política de la cuenta; se conservó su configuración administrada. No se modificaron cuotas ni se contrató un plan. La API usa innovacion_app con permisos read_write, sin SUPERUSER/CREATEDB/CREATEROLE; innovacion_owner se reserva para migraciones. El entorno privado de migración está fuera del repositorio.
+
+Se aplicaron 001–003 y la semilla ficticia 004, y se verificaron 26 PK incluido historial, 24 FK, 3 UNIQUE y 25 CHECK, todas validadas. Las pruebas públicas ejercitaron escrituras, retiros lógicos y rollback en esa base nueva.
+
+Los servicios se crearon directamente con sus variables privadas y se adoptaron con el blueprint actual para configurar /health. Los planes anteriores exs-dbrbj3gae00c73f6ecfg y exs-dbrbn3s9v7es73c4edq0 quedaron sin aplicar; NO aprobarlos porque crearían duplicados. El blueprint actual aparece paused por autoSync=false: los dos servicios están live. Antes de una nueva operación, consultar IDs y deploys, no crear recursos por nombre sin comprobarlos.
+
+Los deploys iniciales activos corresponden al commit 0e5e197d239c47be4ea2cfbb65ebb98ad65751df. Las modificaciones posteriores agregan pruebas, datos operativos y documentación; los archivos de API/frontend/esquema no cambiaron. Confirmar esta igualdad mediante git diff si se actualiza la guía. No se necesita volver a compilar por un cambio solo documental.
+
+La contraseña del administrador inicial y el JWT están guardados en un archivo privado fuera de Git; no se incluyen en este informe, mapa ni logs. Ver el punto de control local para ubicarlo.
 
 ## Referencias primarias
 
@@ -129,3 +143,7 @@ python publicacion/generar_mapa_v2.py --swagger-url http://127.0.0.1:18072/swagg
 ```
 
 La prueba de infraestructura crea dos bases nuevas en el laboratorio astra-, sin borrar ninguna. La prueba de runtime crea y detiene su propio contenedor desechable sin volumen; usa un puerto asignado por Docker. Para repetir las pruebas de capas, construir el target `build` del Dockerfile.render de la API y ejecutar `dotnet run --project api_innovacion/pruebas/PruebaCapas.csproj -c Release` en esa imagen SDK.
+
+## Evidencia pública final
+
+Ocho suites: 359 comprobaciones aprobadas, cero fallos. Una omisión explícita: interrumpir la API se probó solo en el laboratorio (364 checks locales). Probe TransporteBlazor comprobó negociación HTTPS y WSS blazorpack. Cookie de sesión Secure y HttpOnly comprobadas sin registrar su valor. Detalle por suite y límites: docs/VALIDACION_NEON_RENDER_V2.md.

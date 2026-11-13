@@ -1,60 +1,152 @@
-# ASTRA — estado persistente del trabajo
+# ASTRA — punto de control persistente
 
-Actualizado: 2026-11-13 (America/Bogota). **MISIÓN INCOMPLETA**: publicación y verificación externas pendientes; trabajo local y documentación preparados.
+Actualizado: 2026-11-13 (America/Bogota). **Neon y Render desplegados y verificados; cierre documental/PR en curso.**
 
-## Objetivo y ubicación
-Completar Neon + Render + pruebas públicas + Spec Kit V2 + MAPA_COMPLETO_PROYECTO_V2.txt, conservando la arquitectura y los cambios del equipo.
+## Objetivo y repositorios
+Completar despliegue real, pruebas, Spec Kit V2 y MAPA_COMPLETO_PROYECTO_V2.txt conservando arquitectura y trabajo colaborativo.
 
-- Repositorio privado: https://github.com/MrEpia/innovacioncurricular
-- Copia aislada: `C:/Users/USER/Documents/Codex/2026-11-13/14-continuidad-autom-tica-por-l/work/innovacioncurricular`.
-- Rama: `deploy/neon-render-spec-kit-v2`; main no modificada. Base: `24abf0491b5f29aaf0ec346a489570b58140aafa`.
-- Último commit al redactar este punto: `c0fca5c` (pruebas runtime). Código de implementación: `1e91a6eea54e690a3faa9637e2c943ef2d2fc5e4`.
-- La autoridad para el último commit es `git rev-parse HEAD`; el commit del propio checkpoint necesariamente es posterior al hash que registra.
-- PR: aún no creado en este checkpoint; siguiente paso después de confirmar documentación.
+- Repositorio final, por petición posterior del usuario: https://github.com/SebastianBrunal/innovacioncurricular (público).
+- Origen del equipo conservado: https://github.com/MrEpia/innovacioncurricular (origin); personal apunta al repositorio del usuario.
+- Copia local: `C:/Users/USER/Documents/Codex/2026-11-13/14-continuidad-autom-tica-por-l/work/innovacioncurricular`.
+- Rama: deploy/neon-render-spec-kit-v2; tracking personal/deploy/neon-render-spec-kit-v2.
+- main personal es copia exacta de main original en 24abf0491b5f29aaf0ec346a489570b58140aafa. Ninguna main modificada después de la copia. Tags originales v1–v4 preservados. Sin force push.
+- Último commit antes de este checkpoint: 61af4239c51c97e0dd0dfc857ece7993b7dc66d6. Consultar git rev-parse HEAD para el commit que contiene el propio punto de control.
+- PR: pendiente crear borrador en el repositorio personal; no fusionar.
 
-## Fase actual y tarea exacta
-Fase 10, consolidación documental, mapa final y PR borrador. Se trabaja independientemente de los bloqueos externos de las fases 4–7.
+## Fase y próxima acción exacta
+Fases 1–8 completadas, despliegue y pruebas públicas aprobados. Fase 9: regenerar y verificar mapa final contra un commit que incluya los documentos. Fase 10: confirmar documentación, crear PR borrador personal, registrar su URL y subir el checkpoint final. No repetir migraciones, crear más servicios o aprobar planes antiguos.
 
-Última tarea ejecutada: validar 163 operaciones de código contra Swagger real local y completar la documentación de pruebas/despliegue. Pendiente inmediato: confirmar esta fase documental, crear PR borrador, regenerar el mapa contra el commit que ya contiene la documentación, verificar enlaces/líneas y subir el checkpoint final.
+## Completado y pruebas
+- Auditoría inicial: 519 archivos y 91 Markdown del origen; arquitectura C# ASP.NET Core 10 + Dapper + SQL Server y Blazor Server descubierta, no reconstruida.
+- Proveedor PostgreSQL paralelo: 30 repositorios, 29 funciones atómicas, migrador transaccional con advisory lock, historial/checksum compatible LF/CRLF. SQL Server continúa por defecto.
+- Producción: dos Dockerfile.render multietapa, usuario app, PORT; CORS por lista cerrada, health de base/historial, errores 500 sin detalles privados, página Error y cookie Secure en Render.
+- Pruebas de capas: 194. Ocho humos locales: 364. Migrador protegido, repetición, checksum, carrera último administrador y rollback a mitad de INSERT: cinco grupos aprobados. Runtime de producción: cinco grupos aprobados y casos numéricos int32.
+- Ocho suites contra Render/Neon: 359 checks, cero fallos. Una omisión explícita: interrupción de API, cubierta con cinco checks locales sin pausar Render.
+- HTTPS /health y / de ambos servicios=200. Cookie de sesión Secure/HttpOnly comprobada. Negociación HTTPS y WSS blazorpack aceptados por el hosting real.
+- Swagger del backend ejecutado contrastado con 163 operaciones explícitas; el mapa enumera también frontend, sesión, Swagger y transporte.
+- Spec Kit V2 en docs/spec_kit/versiones/v2_neon_render; V2 histórica y demás versiones intactas. Constitución 1.6.0 propuesta en rama para revisión, sin ratificación/fusión automática.
 
-## Fases y tareas completadas
-- 1: Git/acceso WRITE, clon limpio, rama aislada, historial/ramas inspeccionados; sin cambios previos que sobrescribir.
-- 2: arquitectura y documentación auditadas (519 archivos y 91 Markdown en la base). ASP.NET Core 10 + Dapper + SQL Server, Blazor Server separado; Spec Kit del curso con versiones históricas hasta V4.
-- 3: soporte PostgreSQL paralelo (30 repositorios), 29 funciones, migrador no destructivo con advisory lock/checksum/transacción; LF/CRLF compatibles. SQL Server se mantiene por defecto. Dos Dockerfile.render, PORT, CORS cerrado configurable, health de base/historial, errores 500 saneados y página Error.
-- 5 local: 25 tablas funcionales + historial, 24 FK, tres migraciones obligatorias y demo optativa aplicadas; repetición sin duplicados, rechazo de base ajena, fallo de checksum, rollback durante inserción y carrera de último administrador probados.
-- 7 local: 194 comprobaciones de capas, 364 de ocho humos, cinco grupos de infraestructura, cinco de runtime y casos numéricos; todo aprobado. APIs/front aislados 18072/18073. Builds finales y blueprint local validado contra esquema oficial.
-- 8: Spec Kit en docs/spec_kit/versiones/v2_neon_render; constitución 1.6.0 propuesta en rama de revisión, versiones históricas intactas. No se presenta como nueva instalación del CLI oficial Spec Kit.
-- 9: generador y mapa creado; falta regeneración final con todos los documentos ya confirmados. 163 operaciones API exactamente coincidentes con Swagger local; frontend/sesión/Swagger enumerados aparte.
+## Neon — recurso real (no crear otro)
+- Organización org-rapid-mountain-00856296, plan free confirmado.
+- Proyecto lingering-dream-80917462, innovacioncurricular-v2, PostgreSQL 16, AWS us-east-1, cómputo 0.25 CU.
+- Rama br-morning-block-bckftle6, main; base innovacion_curricular.
+- Migraciones reales 001_esquema, 002_operaciones_atomicas, 003_maestro_detalle y 004_datos_demo aplicadas por Npgsql con VerifyFull.
+- 25 tablas funcionales + historial; 24 FK, 26 PK incluido historial, 3 UNIQUE y 25 CHECK, todas validadas. 29 funciones atómicas.
+- innovacion_app: read_write, sin superuser/createdb/createrole; innovacion_owner reservado para migraciones. Un administrador activo tras pruebas.
+- No se transfirió ni eliminó dato de SQL Server/MonsterASP. Semilla ficticia identificada como demo.
+- El intento inicial con autosuspensión explícita devolvió HTTP 412 y no creó proyecto. Se conservó la configuración administrada de la cuenta, sin modificar cuotas.
 
-## Neon — estado real
-No se ha confirmado ningún proyecto/base/rol/URL. list_organizations, list_projects y search devolvieron Unknown tool; luego el namespace Neon dejó de estar disponible. No se crearon recursos ni se ejecutó SQL remoto. Requiere conectar/restablecer Neon. No afirmar que las pruebas locales verificaron Neon.
+## Render — recursos reales (reutilizar IDs)
+- Workspace tea-cvbgt23qf0us73d8uuug, My Workspace.
+- API srv-dbrbnortqb8s73e3igt0, live, free, virginia: https://innovacion-curricular-api-v2-e3wi.onrender.com
+- Front srv-dbrbnv6i0phs73fcvabg, live, free, virginia: https://innovacion-curricular-front-v2-e3wi.onrender.com
+- Ambos healthCheckPath=/health y autoDeploy=no; frontend UrlApi apunta a la API HTTPS real.
+- Blueprint aplicado: exs-dbrbpr8u01pc73apl680, autoSync=false. Estado de control paused significa sincronización automática desactivada, no servicio apagado.
+- Planes antiguos SIN aplicar: exs-dbrbj3gae00c73f6ecfg y exs-dbrbn3s9v7es73c4edq0. NO aprobarlos: crearían duplicados.
+- Deploy API dep-dbrbnp3tqb8s73e3ihl0 y front dep-dbrbnvei0phs73fcvb30, commit 0e5e197d239c47be4ea2cfbb65ebb98ad65751df. API/frontend/esquema de ese commit son iguales a los del HEAD posterior: solo se añadieron pruebas, configuración operativa y documentación.
+- Servicio preexistente inventario srv-cvbh02rtq21c73dv7330 y MonsterASP conservados sin cambios.
 
-## Render — estado real
-Conector operativo; workspace `tea-cvbgt23qf0us73d8uuug` (My Workspace). El inventario antes/después solo mostró el servicio ajeno `inventario`, ID `srv-cvbh02rtq21c73dv7330`, repo SebastianBrunal/inventario: no tocar.
+## Fallos investigados y resueltos
+GO de T-SQL residual en demo (rollback y corrección); DateOnly de Npgsql frente a DateTime/Dapper (casts explícitos y suites repetidas); aviso Kerberos (GSS desactivado, TLS conservado); checksums CRLF/LF (normalización y repetición); acceso Render al repositorio original privado (el usuario lo hizo público y luego pidió copia personal); Neon inicialmente sin conector (usuario lo habilitó). Sonda HttpOnly ajustada para casing de cabeceras; la cookie ya era segura, sin cambio de aplicación. No hay fallos abiertos en las suites ejecutadas.
 
-Se intentó create_blueprint con repo MrEpia/innovacioncurricular, rama de trabajo, render.yaml, create_new, autoSync=false. Respuesta HTTP 400: “the repository, branch, or Blueprint file could not be accessed”. No se obtuvo ID de blueprint ni de servicio nuevo. GitHub API confirma que render.yaml existe en esa rama remota; hay que resolver el acceso de la integración Git de Render. Antes de reintentar, revisar recursos/blueprints existentes para evitar duplicados. No cambiar la privacidad del repo ni incrustar tokens en URLs. No hay URL pública de esta revisión ni deploy exitoso observado.
+## Archivos, comandos y evidencia
+- Ver la lista exacta de archivos modificados al final; MAPA contiene estructura completa, funciones, endpoints y Markdown.
+- Git: clone/status/branch/log/fetch/switch; commits por fase; push de rama y tags a personal. No merge ni force push.
+- Docker: builds de producción y SDK; PruebaCapas.csproj; compose aislado astra-neon-v2 en puertos 18072/18073. No tocar contenedores históricos innovacion-*.
+- Migrador --migrar-postgres --datos-demo ejecutado localmente y en Neon; repetición y archivos LF verificados.
+- Ocho pruebas_humo locales y ocho públicas, SQL remoto con psql y TLS verify-full; validaciones Infra/Runtime y TransporteBlazor.
+- publicacion/generar_mapa_v2.py --swagger-url https://innovacion-curricular-api-v2-e3wi.onrender.com/swagger/v1/swagger.json.
+- JSON Schema oficial Render validado; conectores confirmaron live, /health, plan free, constraints y rol limitado.
+- Detalle: docs/VALIDACION_NEON_RENDER_V2.md y docs/ESTADO_DESPLIEGUE_V2.json. Logs en work fuera de Git (humo_*.log y publico-humo_*.log).
 
-## Pruebas y fallos resueltos
-Ver docs/VALIDACION_NEON_RENDER_V2.md. Fallos iniciales corregidos: GO residual en demo PostgreSQL (rollback), date/DateOnly vs DateTime/Dapper (casts explícitos), aviso Kerberos en runtime mínimo (GSS desactivado, TLS conservado), checksum CRLF vs LF (normalización). Los bloques afectados se repitieron y pasaron. Advertencias frontend heredadas CS0414/BL0008: documentadas, formulario HTTP probado. Interacción completa de eventos Blazor, WebSocket público y cookie Secure del hosting: pendientes. Computer Use se detuvo al no poder determinar la URL de Chrome con confianza; no hubo automatización posterior de esa ventana.
+## Secretos locales — solo ubicación, nunca valores
+Fuera del repositorio: ../.env.neon (owner de migración), ../.env.render-privado.json (credenciales iniciales de administrador y JWT), ../pruebas-local.env (laboratorio). Las variables privadas de aplicación están configuradas en Render con innovacion_app. No copiar estos archivos al repositorio, informes, mapa, outputs compartibles ni logs.
 
-## Comandos y artefactos de evidencia
-- gh repo view / git ls-remote / clone / status / branch / log / fetch / switch -c.
-- docker build con Dockerfile.render de API/front; target build SDK para PruebaCapas.csproj (194 checks).
-- docker compose -p astra-neon-v2 -f docker-compose.postgres.yml --env-file ../pruebas-local.env up/run; --migrar-postgres y --datos-demo, repetidos y desde archivos LF.
-- Ocho pruebas_humo con API_URL/FRONT_URL y PRUEBAS_* apuntando solo al laboratorio.
-- validar_infra_postgres.py y validar_runtime_produccion.py preservados en el repositorio; pruebas aisladas adicionales de conversión numérica.
-- publicacion/generar_mapa_v2.py --swagger-url http://localhost:18072/swagger/v1/swagger.json.
-- Validación JSON Schema oficial de render.yaml; gh API verificó el archivo remoto.
-- Logs y archivos privados de pruebas: directorio work del chat, fuera del repositorio. Archivo privado de entorno local: `../pruebas-local.env`; no publicar su contenido. No existe cadena Neon real guardada.
+## Limitaciones y continuidad
+Sesiones/DataProtection efímeros: reinicios pueden cerrar sesión. Sin pruebas de carga/SLA ni automatización visual de cada botón; sí formularios HTTP, datos, permisos, WSS y cookies. Los planes gratuitos tienen sus límites del proveedor. No son bloqueos del despliegue verificado.
 
-## Trabajo externo pendiente (no simulado)
-1. Reconectar Neon, listar proyectos/ramas/bases y comprobar plan/capacidad gratuita; no crear duplicados ni generar cargos no autorizados.
-2. Resolver acceso del repo privado en Render y consultar servicios/blueprints antes de crear.
-3. Preparar base Neon NUEVA y separada; conexión Npgsql VerifyFull, migrar y comprobar tablas/FK/funciones/historial y backend real. No transferir ni borrar datos originales sin un procedimiento seguro.
-4. Desplegar dos Web Services gratuitos, registrar IDs y URLs efectivas, configurar UrlApi HTTPS y comprobar health y funcionalidad pública completa.
-5. Actualizar resultados/docs/mapa/checkpoint con evidencia pública, confirmar commits, mantener PR sin fusionar.
+No se configuró reactivación automática por cuota, ni se alteraron cuotas, ni se crearon bucles o automaciones. Si se interrumpe antes del cierre, escribir CONTINUAR. Al reanudar: leer estado y ASTRA_REANUDAR; comprobar Git, Neon y Render antes de actuar; retomar solo la tarea exacta pendiente y preservar cambios nuevos.
 
-## Continuidad y límites
-No se ha configurado ni confirmado reactivación automática al restaurarse cuota. Se usa la continuidad del mismo chat y archivos persistentes; si la sesión se interrumpe, escribir CONTINUAR. La documentación oficial consultada sobre trabajo prolongado no constituye una garantía de reinicio por cuota. No modificar límites, comprar créditos ni crear bucles o automaciones para este despliegue específico.
-
-Al reanudar: leer este archivo y ASTRA_REANUDAR.txt; status/branch/log/fetch, revisar diferencias preservando cambios, revalidar Neon y Render, y seguir la primera tarea pendiente. No repetir suites ya aprobadas salvo cambios/fallos nuevos. No declarar finalización hasta cumplir todos los criterios externos.
+## Archivos modificados respecto al main original
+- .dockerignore
+- .gitignore
+- ASTRA_ESTADO_TRABAJO.md
+- ASTRA_REANUDAR.txt
+- DESPLIEGUE_NEON_RENDER.md
+- MAPA_COMPLETO_PROYECTO_V2.txt
+- README.md
+- api_innovacion/ApiInnovacion.csproj
+- api_innovacion/Dockerfile.render
+- api_innovacion/Ensamblador/EnsambladorPostgres.cs
+- api_innovacion/Ensamblador/EnsambladorSeguridad.cs
+- api_innovacion/Infraestructura/ErroresProduccion.cs
+- api_innovacion/Infraestructura/MigradorPostgres.cs
+- api_innovacion/Program.cs
+- api_innovacion/Repositorios/Postgres/ConfiguracionPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioAaRcPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioAcreditacionPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioActivAcademicaPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioAliadoPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioAlianzaPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioAnProgramaPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioAreaConocimientoPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioAspectoNormativoPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioCarInnovacionPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioDashboardPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioDocenteDepartamentoPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioEnfoquePostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioEnfoqueRcPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioFacultadPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioPasantiaPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioPracticaEstrategiaPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioPremioPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioProgramaAcPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioProgramaCiPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioProgramaCompletoPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioProgramaPePostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioProgramaPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioReferenciasPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioRegistroCalificadoCompletoPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioRegistroCalificadoPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioReportesPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioRolPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioRolUsuarioPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioUniversidadPostgres.cs
+- api_innovacion/Repositorios/Postgres/RepositorioUsuarioPostgres.cs
+- db/postgres/001_esquema.sql
+- db/postgres/002_operaciones_atomicas.sql
+- db/postgres/003_maestro_detalle.sql
+- db/postgres/demo/004_datos_demo.sql
+- docker-compose.postgres.yml
+- docs/AUDITORIA_NEON_RENDER_V2.md
+- docs/ESTADO_DESPLIEGUE_V2.json
+- docs/VALIDACION_NEON_RENDER_V2.md
+- docs/spec_kit/1_constitution.md
+- docs/spec_kit/versiones/0_mapa_versiones.md
+- docs/spec_kit/versiones/v2_neon_render/2_spec.md
+- docs/spec_kit/versiones/v2_neon_render/3_plan.md
+- docs/spec_kit/versiones/v2_neon_render/4_research.md
+- docs/spec_kit/versiones/v2_neon_render/5_data_model.md
+- docs/spec_kit/versiones/v2_neon_render/6_contracts.md
+- docs/spec_kit/versiones/v2_neon_render/7_quickstart.md
+- docs/spec_kit/versiones/v2_neon_render/8_tasks.md
+- docs/spec_kit/versiones/v2_neon_render/9_checklist.md
+- docs/spec_kit/versiones/v2_neon_render/openapi.local.json
+- front_blazor/Components/Pages/Error.razor
+- front_blazor/Dockerfile.render
+- front_blazor/Ensamblador/EnsambladorSesion.cs
+- front_blazor/Program.cs
+- pruebas_humo/TransporteBlazor/Program.cs
+- pruebas_humo/TransporteBlazor/TransporteBlazor.csproj
+- pruebas_humo/comun.py
+- pruebas_humo/humo_academico.py
+- pruebas_humo/humo_front.py
+- pruebas_humo/humo_maestro_detalle.py
+- pruebas_humo/humo_reportes.py
+- pruebas_humo/humo_roles_front.py
+- pruebas_humo/humo_seguridad.py
+- pruebas_humo/validar_infra_postgres.py
+- pruebas_humo/validar_runtime_produccion.py
+- publicacion/.env.neon.example
+- publicacion/generar_mapa_v2.py
+- render.yaml

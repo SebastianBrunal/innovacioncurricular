@@ -1,5 +1,7 @@
 # Auditoría inicial — Neon, Render y revisión documental V2
 
+Nota: este documento conserva el estado de la inspección inicial. Los bloqueos posteriores se resolvieron; el resultado vigente está en VALIDACION_NEON_RENDER_V2.md, ESTADO_DESPLIEGUE_V2.json y ASTRA_ESTADO_TRABAJO.md.
+
 Fecha: 2026-11-13 (America/Bogota). Base: `24abf0491b5f29aaf0ec346a489570b58140aafa`.
 
 ## Git y colaboración

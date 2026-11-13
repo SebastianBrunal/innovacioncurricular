@@ -1,6 +1,6 @@
 # Validación — Neon y Render V2
 
-Entorno: Docker local aislado `astra-neon-v2`, PostgreSQL 16, API/Blazor .NET 10, puertos 18072/18073 en loopback. Referencia de código: 1e91a6eea54e690a3faa9637e2c943ef2d2fc5e4. Ningún resultado de este informe equivale a una verificación en Neon/Render.
+Entorno: Docker local aislado `astra-neon-v2`, PostgreSQL 16, API/Blazor .NET 10, puertos 18072/18073 en loopback. Referencia de código: 1e91a6eea54e690a3faa9637e2c943ef2d2fc5e4. Los resultados locales se distinguen de las verificaciones posteriores realizadas en Neon y en las URLs públicas de Render.
 
 ## Resultados finales locales
 
@@ -45,12 +45,36 @@ Las ocho pruebas de humo suman **364 comprobaciones HTTP/SQL locales**. Los 194 
 
 Sin fallos locales abiertos en las suites ejecutadas. El frontend conserva advertencias de compilación heredadas (campos original sin uso y BL0008 en el formulario de ingreso); el formulario pasó la prueba HTTP, pero eso no elimina la advertencia.
 
-## Verificaciones pendientes
+## Verificación pública en Render y Neon
 
-- Neon real: sin acceso confirmado, proyecto/base/rol/tablas/TLS y conexión del backend aún pendientes.
-- Render real: intento de blueprint falló con HTTP 400 por acceso al repositorio privado/rama/archivo. No hay servicio/URL nueva verificada ni ID de blueprint confirmado.
-- Pruebas públicas HTTPS de frontend → API → Neon; WebSocket de Blazor y cookie Secure en el hosting.
-- Interacción completa con los botones Blazor en navegador. Las suites HTTP no ejecutan todos los eventos interactivos; Computer Use se detuvo al no poder identificar la URL de Chrome.
-- Carga, múltiples instancias, persistencia DataProtection y continuidad de sesiones entre despliegues no verificadas. El almacén actual es memoria.
+Frontend: https://innovacion-curricular-front-v2-e3wi.onrender.com . API: https://innovacion-curricular-api-v2-e3wi.onrender.com . Ambos /health y / responden 200 por HTTPS. Se verificó además el JSON Swagger público contra 163 operaciones explícitas del código.
 
-La misión permanece INCOMPLETA hasta resolver los accesos y ejecutar las validaciones externas. No se atribuye éxito a una compilación ni a una simulación.
+| Suite contra URLs públicas | Checks aprobados | Fallos |
+|---|---:|---:|
+| humo_seguridad.py | 54 | 0 |
+| humo_academico.py | 40 | 0 |
+| humo_actividades.py | 41 | 0 |
+| humo_puentes.py | 55 | 0 |
+| humo_maestro_detalle.py | 49 | 0 |
+| humo_roles_front.py | 30 | 0 |
+| humo_reportes.py | 74 | 0 |
+| humo_front.py | 16 | 0 |
+
+Total: **359 comprobaciones públicas**, ocho suites completas sin fallos. La única omisión es el bloque que congela la API, desactivado explícitamente en Render para mantener el servicio; sus cinco checks pasaron localmente. No se ocultó ningún fallo con esa omisión.
+
+Las pruebas SQL directas usaron la base Neon nueva con TLS verify-full desde psql, credenciales transmitidas solo por entorno. Comprobaron hash y retiro lógico, y llamaron a la función maestro-detalle con un hijo inválido para validar que no quedara ningún registro. Login/roles/CRUD se ejecutaron desde la API con el rol limitado de aplicación; los formularios/menús/lecturas y logout pasaron desde el frontend público.
+
+Neon: 25 tablas funcionales + historial, 24 FK, 26 PK incluido historial, 3 UNIQUE, 25 CHECK; todas con convalidated=true. Hay 29 funciones atómicas y cuatro migraciones aplicadas. El rol innovacion_app no es superusuario ni puede crear bases o roles; queda un administrador inicial activo tras las limpiezas de las suites.
+
+El probe `pruebas_humo/TransporteBlazor/Program.cs` negoció por HTTPS, abrió WSS y obtuvo aceptación de blazorpack. Se verificó la cookie de sesión Secure y HttpOnly sin registrar su valor. La primera comprobación auxiliar de HttpOnly dependía de mayúsculas; se ajustó para reconocer nombres de atributos sin distinguir mayúsculas y la comprobación pasó. No requirió cambio en la aplicación.
+
+HealthCheckPath=/health confirmado en ambos servicios Render; plan free y autoDeploy=no. Blueprint exs-dbrbpr8u01pc73apl680 aplicado sobre esos dos servicios nuevos, con autoSync=false. No se modificó el servicio inventario ni MonsterASP.
+
+## Alcance y límites que permanecen
+
+- No se automatizó cada interacción visual de todos los botones Blazor. Sí se comprobaron formularios HTTP, datos renderizados, roles, logout, WebSocket real y cookie segura.
+- No se hicieron pruebas de carga, escalamiento horizontal ni continuidad de sesión entre reemplazos del proceso. El almacén de sesión y DataProtection sigue siendo efímero.
+- Los datos sembrados son ficticios. No se afirma una transferencia de datos originales de SQL Server.
+- No hay fallos abiertos de compilación, migraciones, suites ejecutadas o disponibilidad pública en la comprobación final. Las advertencias heredadas descritas arriba permanecen documentadas.
+
+La revisión queda preparada para revisión por PR, sin fusión automática. Los resultados son evidencia de esta fecha, no una garantía de disponibilidad futura de los planes gratuitos.
