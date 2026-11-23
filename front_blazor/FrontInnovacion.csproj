@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>FrontInnovacion</RootNamespace>
+    <!-- Docker restaura antes de copiar los .razor. .NET 10 debe incluir los
+         recursos de Blazor también cuando aún no ve esos componentes. -->
+    <RequiresAspNetWebAssets>true</RequiresAspNetWebAssets>
   </PropertyGroup>
 
   <!-- Sin paquetes: Blazor Server viene en el SDK web, y el front no necesita
