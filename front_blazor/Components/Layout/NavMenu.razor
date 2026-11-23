@@ -1,0 +1,132 @@
+@*
+    EL MENÚ, CON UN ENLACE POR PANTALLA
+
+    Un enlace por recurso, escrito aquí, a direcciones que existen — no una
+    dirección con el nombre de la tabla como parámetro (Artículo 10.1).
+
+    Con veintidós pantallas, una sola fila de enlaces ya no se puede leer: se
+    agrupan en cuatro menús desplegables por tema. Se usa <details>, que es
+    HTML puro: abre y cierra sin una línea de JavaScript y funciona aunque la
+    conexión de Blazor todavía no haya subido.
+
+    v3 (David Epia): el menú depende de la sesión. Sin sesión, solo «Ingresar».
+    Con sesión, los catálogos para todos y «Administración» SOLO para el rol
+    administrador. Esconder un enlace no protege nada —eso lo hace la API—: es
+    para no ofrecerle a nadie una puerta que no puede usar.
+
+    v4: las páginas corporativas (Inicio, Servicios, Nosotros, Soporte,
+    Contacto) son públicas. Sin sesión van sueltas junto a «Ingresar»; con
+    sesión se agrupan en «La Universidad» para dejar sitio a la aplicación.
+    En el celular todo el menú se pliega tras el botón «Menú»: es una casilla
+    de HTML con CSS (sin JavaScript), así que funciona antes de que Blazor cargue.
+*@
+<nav class="menu">
+    <div class="contenedor">
+    <input type="checkbox" id="menu-abierto" class="menu-interruptor" />
+    <label for="menu-abierto" class="menu-boton">☰ Menú</label>
+    <div class="menu-interno">
+    <AuthorizeView>
+    <NotAuthorized>
+        <NavLink class="enlace" href="" Match="NavLinkMatch.All">Inicio</NavLink>
+        <NavLink class="enlace" href="servicios">Servicios</NavLink>
+        <NavLink class="enlace" href="nosotros">Sobre nosotros</NavLink>
+        <NavLink class="enlace" href="soporte">Soporte</NavLink>
+        <NavLink class="enlace" href="contacto">Contacto</NavLink>
+        <span class="sesion">
+            <a class="boton primario" href="ingresar">Ingresar</a>
+        </span>
+    </NotAuthorized>
+    <Authorized>
+        <details class="grupo-menu">
+            <summary class="enlace">La Universidad</summary>
+            <div class="submenu">
+                <NavLink class="enlace" href="" Match="NavLinkMatch.All">Inicio</NavLink>
+                <NavLink class="enlace" href="servicios">Servicios</NavLink>
+                <NavLink class="enlace" href="nosotros">Sobre nosotros</NavLink>
+                <NavLink class="enlace" href="soporte">Soporte</NavLink>
+                <NavLink class="enlace" href="contacto">Contacto</NavLink>
+            </div>
+        </details>
+
+        <NavLink class="enlace" href="aplicacion">Aplicación</NavLink>
+        <NavLink class="enlace" href="dashboard">Dashboard</NavLink>
+        <NavLink class="enlace" href="reportes">Reportes</NavLink>
+
+        <details class="grupo-menu">
+            <summary class="enlace">Catálogos</summary>
+            <div class="submenu">
+                <NavLink class="enlace" href="universidades">Universidades</NavLink>
+                <NavLink class="enlace" href="areas-conocimiento">Áreas de conocimiento</NavLink>
+                <NavLink class="enlace" href="aspectos-normativos">Aspectos normativos</NavLink>
+                <NavLink class="enlace" href="practicas-estrategias">Prácticas y estrategias</NavLink>
+                <NavLink class="enlace" href="enfoques">Enfoques</NavLink>
+                <NavLink class="enlace" href="caracteristicas-innovacion">Características de innovación</NavLink>
+                <NavLink class="enlace" href="aliados">Aliados</NavLink>
+            </div>
+        </details>
+
+        <details class="grupo-menu">
+            <summary class="enlace">Estructura académica</summary>
+            <div class="submenu">
+                <NavLink class="enlace" href="facultades">Facultades</NavLink>
+                <NavLink class="enlace" href="programas">Programas</NavLink>
+                <NavLink class="enlace" href="acreditaciones">Acreditaciones</NavLink>
+                <NavLink class="enlace" href="registros-calificados">Registros calificados</NavLink>
+            </div>
+        </details>
+
+        <details class="grupo-menu">
+            <summary class="enlace">Actividades y vínculos</summary>
+            <div class="submenu">
+                <NavLink class="enlace" href="actividades-academicas">Actividades académicas</NavLink>
+                <NavLink class="enlace" href="pasantias">Pasantías</NavLink>
+                <NavLink class="enlace" href="premios">Premios</NavLink>
+                <NavLink class="enlace" href="docentes-departamentos">Docentes por departamento</NavLink>
+                <NavLink class="enlace" href="alianzas">Alianzas</NavLink>
+            </div>
+        </details>
+
+        <details class="grupo-menu">
+            <summary class="enlace">Relaciones</summary>
+            <div class="submenu">
+                <NavLink class="enlace" href="programas-areas">Programas y áreas</NavLink>
+                <NavLink class="enlace" href="programas-practicas">Programas y prácticas</NavLink>
+                <NavLink class="enlace" href="programas-caracteristicas">Programas y características</NavLink>
+                <NavLink class="enlace" href="aspectos-programas">Aspectos normativos por programa</NavLink>
+                <NavLink class="enlace" href="enfoques-registros">Enfoques por registro calificado</NavLink>
+                <NavLink class="enlace" href="actividades-registros">Actividades por registro calificado</NavLink>
+            </div>
+        </details>
+
+        <details class="grupo-menu">
+            <summary class="enlace">Maestro-detalle</summary>
+            <div class="submenu">
+                <NavLink class="enlace" href="registros-calificados/completo">Registro calificado con su detalle</NavLink>
+                <NavLink class="enlace" href="programas/completo">Programa con su detalle</NavLink>
+            </div>
+        </details>
+
+        <AuthorizeView Roles="administrador" Context="admin">
+            <details class="grupo-menu">
+                <summary class="enlace">Administración</summary>
+                <div class="submenu">
+                    <NavLink class="enlace" href="admin/usuarios">Usuarios</NavLink>
+                    <NavLink class="enlace" href="admin/roles">Roles</NavLink>
+                    <NavLink class="enlace" href="admin/asignaciones">Asignación de roles</NavLink>
+                </div>
+            </details>
+        </AuthorizeView>
+
+        <span class="sesion">
+            <span class="nota">@context.User.Identity?.Name · @string.Join(", ", context.User.FindAll(System.Security.Claims.ClaimTypes.Role).Select(c => c.Value))</span>
+            @* Cerrar sesión es un POST con token antifalsificación (RF10). *@
+            <form method="post" action="/sesion/salir" class="form-salir">
+                <AntiforgeryToken />
+                <button type="submit" class="boton">Cerrar sesión</button>
+            </form>
+        </span>
+    </Authorized>
+    </AuthorizeView>
+    </div>
+    </div>
+</nav>

@@ -1,0 +1,109 @@
+# ==============================================================
+# Módulo INNOVACIÓN CURRICULAR — entregas 1, 2 y 3 (v3: JWT y roles)
+#
+#   FRONT Blazor (:8073) → API innovacion (C#, :8072) → SQL Server (innovacion_local)
+#
+# TRES procesos, no dos. El front es una aplicación aparte que solo
+# habla con la API por HTTP: no tiene línea hacia SQL Server, y no la
+# va a tener nunca.
+#
+# Uso:   cp .env.example .env            (una sola vez, y cambie los valores)
+#        docker compose up -d --build     (UN solo comando)
+# Reset de la BD: docker compose down -v && docker compose up -d
+#
+# NINGÚN secreto está escrito aquí (Artículo 7, enmienda 1.1.0): todos
+# salen del archivo .env, que no se versiona. Si falta una variable,
+# compose se niega a arrancar y dice cuál.
+#
+# Compose v2 ignora la directiva 'version:' y advierte que está obsoleta:
+# por eso no aparece.
+# ==============================================================
+services:
+
+  # --- SQL Server 2022: el único motor del proyecto ---
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: innovacion-sqlserver
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      # La contraseña sale del .env. El ':?' hace que compose falle con un
+      # mensaje claro si no existe, en vez de arrancar un SQL Server sin clave.
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?Falta MSSQL_SA_PASSWORD en .env}
+    ports:
+      - "11471:1433"
+    volumes:
+      - mssqldata:/var/opt/mssql
+    healthcheck:
+      # No basta con que el contenedor exista: hay que saber si el motor ya
+      # RESPONDE consultas. Tarda entre 30 y 60 segundos en aceptarlas.
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P \"$$MSSQL_SA_PASSWORD\" -C -Q 'SELECT 1' -b"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 30s
+
+  # --- Inicializador: crea la base y corre el script UNA vez, y se muere ---
+  sqlserver-init:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: innovacion-sqlserver-init
+    restart: "no"
+    environment:
+      - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD:?Falta MSSQL_SA_PASSWORD en .env}
+    volumes:
+      - ./db:/scripts:ro
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    entrypoint: ["/bin/bash", "/scripts/init.sh"]
+
+  # --- La API: C# / ASP.NET Core, con el código montado y dotnet watch ---
+  api-innovacion:
+    build: ./api_innovacion
+    container_name: innovacion-api
+    restart: unless-stopped
+    ports:
+      - "8072:8072"                # el MISMO número adentro y afuera
+    volumes:
+      - ./api_innovacion:/app      # el código montado: guardar un .cs recompila solo
+      - /app/bin                   # bin y obj quedan DENTRO del contenedor (Linux),
+      - /app/obj                   #   sin mezclarse con los compilados de Windows
+      - /app/pruebas/bin           # ídem para la prueba de capas: así correrla con
+      - /app/pruebas/obj           #   «docker compose run» no escribe en la carpeta del PC
+    environment:
+      # El host es el NOMBRE del servicio. El doble guion bajo hace que ASP.NET
+      # lea esto como ConnectionStrings:SqlServer y SOBREESCRIBA appsettings.json.
+      - ConnectionStrings__SqlServer=Server=sqlserver,1433;Database=innovacion_local;User Id=sa;Password=${MSSQL_SA_PASSWORD:?Falta MSSQL_SA_PASSWORD en .env};TrustServerCertificate=True;
+      # Entrega 3: la llave de firma del JWT y el administrador inicial.
+      - Jwt__Secreto=${JWT_SECRETO:?Falta JWT_SECRETO en .env}
+      - Jwt__Minutos=${JWT_MINUTOS:-60}
+      - AdminInicial__Usuario=${ADMIN_USUARIO:?Falta ADMIN_USUARIO en .env}
+      - AdminInicial__Correo=${ADMIN_CORREO:?Falta ADMIN_CORREO en .env}
+      - AdminInicial__Clave=${ADMIN_CLAVE:?Falta ADMIN_CLAVE en .env}
+    depends_on:
+      sqlserver-init:
+        condition: service_completed_successfully   # espera a que la base esté SEMBRADA
+
+  # --- EL FRONT: Blazor Server, un TERCER proceso ---
+  front-blazor:
+    build: ./front_blazor
+    container_name: innovacion-front
+    restart: unless-stopped
+    ports:
+      - "8073:8073"                # http://localhost:8073
+    volumes:
+      - ./front_blazor:/app        # el código montado: guardar un .razor recompila solo
+      - /app/bin                   # bin y obj quedan DENTRO del contenedor
+      - /app/obj
+    environment:
+      # El NOMBRE del servicio, no localhost: dentro del contenedor del front,
+      # localhost sería el front mismo.
+      - UrlApi=http://api-innovacion:8072
+    depends_on:
+      - api-innovacion
+      # NO depende de sqlserver, y eso no es un olvido: el front no tiene nada
+      # que hacer con la base. Si algún día necesitara esa dependencia, sería
+      # la señal de que alguien rompió la arquitectura.
+
+volumes:
+  mssqldata:

@@ -1,0 +1,51 @@
+@*
+    El marco de todas las pantallas: la barra de arriba, el menú y el
+    contenido.
+
+    NO HAY AUTENTICACIÓN AQUÍ, y no es un olvido. La v1 construye el CRUD de
+    una tabla; el ingreso con usuario y el control de acceso por rol son de
+    otra versión, y anticiparlos contradice el Artículo 1.
+*@
+@inherits LayoutComponentBase
+
+<div class="pagina">
+
+    <header>
+        <div class="barra">
+            <div class="contenedor barra-interna">
+                <a class="marca" href="">Innovación curricular</a>
+                <span class="umv-logo">
+                    <img src="marca/logo-horizontal.png" alt="Universidad Monte Verde" />
+                </span>
+            </div>
+        </div>
+        <NavMenu />
+    </header>
+
+    <main class="contenedor">
+        @Body
+    </main>
+
+    <footer>
+        <div class="contenedor pie">
+            <div>
+                <img class="pie-logo" src="marca/logo-horizontal.png" alt="Universidad Monte Verde" />
+                <p>Sistema de innovación curricular · Vicerrectoría Académica</p>
+            </div>
+            <nav class="pie-enlaces" aria-label="Páginas de la Universidad">
+                <a href="servicios">Servicios</a>
+                <a href="nosotros">Sobre nosotros</a>
+                <a href="soporte">Soporte</a>
+                <a href="contacto">Contacto</a>
+            </nav>
+            <p class="nota">Universidad Monte Verde es una institución inventada para el curso de Diseño de Software.</p>
+        </div>
+    </footer>
+
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    Ocurrió un error inesperado.
+    <a href="." class="reload">Recargar</a>
+    <span class="dismiss">🗙</span>
+</div>

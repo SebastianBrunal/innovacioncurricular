@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- v4: el XML con los comentarios /// alimenta la documentación de Swagger.
+         1591 = «falta el comentario XML»: no todo miembro público lo necesita. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Los paquetes que permite el Artículo 2, y ninguno más -->
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <!-- v3 (enmienda 1.2.0 del Artículo 2): validar los JWT en cada petición.
+         El hash de contraseñas NO necesita paquete: PBKDF2 viene en .NET. -->
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- La carpeta pruebas/ tiene SU PROPIO proyecto: se excluye de la compilación
+         de la API para que el repositorio de mentiras no termine publicado con el
+         sistema real (3_plan.md §2). -->
+    <Compile Remove="pruebas/**" />
+    <Content Remove="pruebas/**" />
+    <None Remove="pruebas/**" />
+  </ItemGroup>
+
+</Project>

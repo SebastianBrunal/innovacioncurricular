@@ -1,0 +1,24 @@
+# .NET build output
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+
+# Secretos (Artículo 7): el .env NUNCA se versiona; el .env.example sí.
+.env
+!.env.example
+*.log
+
+# Python (pruebas de humo)
+__pycache__/
+
+# Publicación (entrega 4): los secretos del hosting y lo que se compila para subir
+publicacion/.env.produccion
+publicacion/salida/
