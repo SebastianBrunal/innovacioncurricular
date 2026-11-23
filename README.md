@@ -5,12 +5,11 @@ Curricular** del Sistema de Gestión de Información del Conocimiento
 Universitario, para la *Universidad Monte Verde* (institución ficticia del
 curso).
 
-**Equipo:** Sebastián Calvo (encargado del `main`) · David Epia
+**Autor:** Sebastián Brunal
 
-> Sebastián Brunal salió del grupo antes de la entrega 2: desde entonces el
-> trabajo se reparte entre los dos. Las ramas `feature/sebastian-brunal-…` de
-> GitHub conservan el nombre del reparto inicial, pero su trabajo lo hizo y lo
-> subió David.
+> Por indicación del profesor, este repositorio lo desarrolla y mantiene
+> Sebastián Brunal de forma individual, a partir de la base del proyecto de
+> aula del curso.
 
 | Entrega | Qué agrega | Spec kit |
 |---|---|---|
@@ -26,7 +25,7 @@ curso).
 |---|---|
 | Sitio (front) | <http://innovacion-umv.runasp.net> |
 | API y documentación | <http://innovacion-api.runasp.net> · <http://innovacion-api.runasp.net/swagger> |
-| Repositorio | <https://github.com/MrEpia/innovacioncurricular> |
+| Repositorio | <https://github.com/SebastianBrunal/innovacioncurricular> |
 
 Publicado en MonsterASP.NET (plan gratuito). HTTPS está pedido a soporte: en el
 plan gratuito se activa a mano. Cómo se publicó: [7_quickstart.md §2](docs/spec_kit/versiones/v4_publicacion/7_quickstart.md).
@@ -41,7 +40,7 @@ El material del curso (metodología, módulos y scripts originales) está en
 Solo hace falta **Docker Desktop**.
 
 ```powershell
-git clone https://github.com/MrEpia/innovacioncurricular.git
+git clone https://github.com/SebastianBrunal/innovacioncurricular.git
 cd innovacioncurricular
 Copy-Item .env.example .env       # y cambie TODOS los valores
 docker compose up -d --build
@@ -129,11 +128,9 @@ pruebas_humo/            pruebas contra el sistema levantado
 publicacion/             publicar.py: base, API y front para el hosting (MonsterASP)
 ```
 
-## 5. Cómo trabaja el equipo
+## 5. Flujo de trabajo
 
-Nadie hace commits en `main`. Cada estudiante trabaja en su rama
-`feature/<nombre>-<descripcion>`, hace commits pequeños con su propia identidad
-de git (`git config user.name` / `user.email` **sin** `--global`, dentro de su
-carpeta) y sube su rama; el encargado del `main` integra y, al pasar los
-criterios, pone el tag de la versión. El reparto y el orden de cada entrega
-están en el `8_tasks.md` de su versión.
+Los cambios no se hacen directo en `main`: cada mejora va en su propia rama
+(`feature/<descripcion>` o `deploy/<descripcion>`) con commits pequeños, y se
+integra a `main` por pull request cuando pasa las pruebas. El orden de cada
+entrega está en el `8_tasks.md` de su versión.
